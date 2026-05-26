@@ -1,0 +1,808 @@
+/**
+ * Fastsun 知识库 - 100% 精确还原设计图
+ * 修复所有问题：毛玻璃效果、气泡位置、侧边栏高度、黑暗模式、图标对齐
+ */
+
+/* ==================== 全局变量 ==================== */
+:root {
+  /* 主色调 - 紫色系 */
+  --theme-color: #8B5CF6;
+  --theme-color-light: #A78BFA;
+  --theme-color-lighter: #DDD6FE;
+  --theme-color-dark: #7C3AED;
+  
+  /* 背景色 */
+  --bg-body: linear-gradient(135deg, #E0E7FF 0%, #C7D2FE 30%, #DDD6FE 60%, #E0E7FF 100%);
+  --bg-sidebar: rgba(255, 255, 255, 0.6);
+  --bg-content: rgba(255, 255, 255, 0.85);
+  --bg-code: #1E1E2E;
+  
+  /* 文字颜色 */
+  --text-primary: #2D3748;
+  --text-secondary: #4A5568;
+  --text-tertiary: #718096;
+  
+  /* 边框和阴影 */
+  --border-color: rgba(255, 255, 255, 0.6);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 12px 48px rgba(0, 0, 0, 0.1);
+  
+  /* 圆角 */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-full: 9999px;
+}
+
+/* ==================== 全局样式 ==================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg-body);
+  background-attachment: fixed;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 背景装饰 - 光点 */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.9) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.7) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.5) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ==================== 侧边栏 - 精确还原设计图 ==================== */
+.sidebar {
+  background: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  padding: 0;
+  margin: 20px;
+  border-radius: 24px;
+  width: 240px !important;
+  height: calc(100vh - 40px) !important;
+  max-height: calc(100vh - 40px) !important;
+  top: 20px !important;
+  left: 20px !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: fixed !important;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 0;
+}
+
+/* 侧边栏头部 */
+.sidebar-header {
+  padding: 24px 12px 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.app-name {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin: 0;
+  padding-left: 8px;
+}
+
+.app-name-link {
+  background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 移除紫色圆球 */
+.app-name-link::before {
+  display: none;
+}
+
+/* 搜索框 */
+.search {
+  margin: 12px 16px;
+  padding: 0;
+}
+
+.search input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.search input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.search input:focus {
+  outline: none;
+  border-color: var(--theme-color);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+/* 侧边栏导航 */
+.sidebar-nav {
+  padding: 8px 12px 16px;
+}
+
+.sidebar-nav > ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-nav > ul > li {
+  margin: 2px 0;
+}
+
+.sidebar-nav > ul > li > a {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px;
+  padding: 8px 12px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  line-height: 1;
+}
+
+/* 菜单图标 - SVG */
+.menu-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  fill: currentColor;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.sidebar-nav > ul > li:nth-child(1) .menu-icon { display: none; }
+.sidebar-nav > ul > li:nth-child(2) .menu-icon { display: block; }
+.sidebar-nav > ul > li:nth-child(3) .menu-icon { display: block; }
+.sidebar-nav > ul > li:nth-child(4) .menu-icon { display: block; }
+.sidebar-nav > ul > li:nth-child(5) .menu-icon { display: block; }
+.sidebar-nav > ul > li:nth-child(6) .menu-icon { display: block; }
+.sidebar-nav > ul > li:nth-child(7) .menu-icon { display: block; }
+.sidebar-nav > ul > li:nth-child(8) .menu-icon { display: block; }
+
+.sidebar-nav > ul > li > a:hover {
+  background: rgba(139, 92, 246, 0.08);
+  color: var(--theme-color);
+}
+
+.sidebar-nav > ul > li > a.active {
+  background: rgba(139, 92, 246, 0.12);
+  color: var(--theme-color);
+  font-weight: 600;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0;
+}
+
+.sidebar-nav ul li a {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px;
+  padding: 6px 12px 6px 20px;
+  font-size: 14px;
+  color: var(--text-tertiary);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.sidebar-nav ul li a:hover {
+  background: rgba(139, 92, 246, 0.06);
+  color: var(--theme-color);
+}
+
+.sidebar-nav ul li a.active {
+  background: rgba(139, 92, 246, 0.1);
+  color: var(--theme-color);
+  font-weight: 500;
+}
+
+/* ==================== 主内容区 - 精确还原设计图 ==================== */
+.content {
+  padding: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.markdown-section {
+  max-width: 1300px;
+  margin: 130px 20px 20px 20px;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(40px) saturate(220%);
+  -webkit-backdrop-filter: blur(40px) saturate(220%);
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.06);
+  height: calc(100vh - 150px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ==================== 标题样式 - 精确还原 ==================== */
+.markdown-section h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+  margin: 0 0 28px 0;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--theme-color-lighter);
+  display: flex;
+  align-items: center;
+}
+
+.markdown-section h1::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--theme-color);
+  border-radius: 50%;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.markdown-section h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 36px 0 16px 0;
+  padding-left: 14px;
+  border-left: 3px solid var(--theme-color);
+  letter-spacing: -0.2px;
+}
+
+.markdown-section h3 {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 24px 0 14px 0;
+}
+
+/* ==================== 段落和列表 ==================== */
+.markdown-section p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin: 14px 0;
+}
+
+.markdown-section ul,
+.markdown-section ol {
+  padding-left: 18px;
+  margin: 14px 0;
+}
+
+.markdown-section li {
+  margin: 6px 0;
+  line-height: 1.8;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* ==================== 链接样式 ==================== */
+.markdown-section a {
+  color: var(--theme-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.markdown-section a:hover {
+  color: var(--theme-color-dark);
+}
+
+/* ==================== 代码样式 ==================== */
+.markdown-section pre {
+  background: #1E1E2E !important;
+  border-radius: 12px;
+  padding: 18px;
+  margin: 18px 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  overflow-x: auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.markdown-section code {
+  font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.markdown-section p code,
+.markdown-section li code {
+  background: rgba(139, 92, 246, 0.1);
+  color: var(--theme-color);
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* ==================== 引用块 ==================== */
+.markdown-section blockquote {
+  background: rgba(139, 92, 246, 0.05);
+  border-left: 3px solid var(--theme-color);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin: 18px 0;
+}
+
+.markdown-section blockquote p {
+  margin: 0;
+  color: var(--text-primary);
+}
+
+/* ==================== 表格样式 ==================== */
+.markdown-section table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 20px 0;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.markdown-section table thead {
+  background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
+  color: white;
+}
+
+.markdown-section table th {
+  padding: 12px 18px;
+  font-weight: 600;
+  text-align: left;
+  border: none;
+  font-size: 13px;
+}
+
+.markdown-section table td {
+  padding: 12px 18px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.markdown-section table tr:last-child td {
+  border-bottom: none;
+}
+
+.markdown-section table tr:hover {
+  background: rgba(139, 92, 246, 0.04);
+  transition: background 0.2s ease;
+}
+
+/* ==================== 图片样式 ==================== */
+.markdown-section img {
+  max-width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  margin: 20px 0;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* ==================== 分割线 ==================== */
+.markdown-section hr {
+  height: 1px;
+  border: none;
+  background: linear-gradient(90deg, transparent 0%, var(--theme-color-lighter) 50%, transparent 100%);
+  margin: 36px 0;
+}
+
+/* ==================== 动漫助手 - 精确还原设计图 ==================== */
+.anime-helper {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: float 4s ease-in-out infinite;
+}
+
+.anime-helper:hover {
+  transform: scale(1.05);
+}
+
+.anime-helper-container {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.1);
+  background: transparent;
+  position: relative;
+  border: 3px solid rgba(255, 255, 255, 0.8);
+}
+
+.anime-helper-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.3s ease;
+}
+
+.anime-helper:hover .anime-helper-container {
+  box-shadow: 0 16px 48px rgba(139, 92, 246, 0.3);
+  border-color: rgba(255, 255, 255, 1);
+}
+
+/* 浮动动画 */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* 对话气泡 - 显示在下方 */
+.anime-helper-bubble {
+  position: absolute;
+  bottom: -70px;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  padding: 14px 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.anime-helper:hover .anime-helper-bubble {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.anime-helper-bubble::after {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: 30px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid rgba(255, 255, 255, 0.95);
+}
+
+.anime-helper-bubble-text {
+  font-size: 14px;
+  color: #2D3748;
+  font-weight: 500;
+}
+
+/* ==================== 黑暗模式开关 ==================== */
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 220px;
+  z-index: 9999;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  font-size: 20px;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* 黑暗模式 - 所有文字使用亮色 */
+body.dark-mode {
+  --bg-body: linear-gradient(135deg, #1a1a2e 0%, #16213e 30%, #0f3460 60%, #1a1a2e 100%);
+  --bg-sidebar: rgba(30, 30, 46, 0.7);
+  --bg-content: rgba(30, 30, 46, 0.85);
+  --text-primary: #FFFFFF;
+  --text-secondary: #F0F0F0;
+  --text-tertiary: #E0E0E0;
+  --border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .sidebar {
+  background: rgba(30, 30, 46, 0.7) !important;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .markdown-section {
+  background: rgba(30, 30, 46, 0.85);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 黑暗模式 - 标题颜色（纯白色） */
+body.dark-mode .markdown-section h1,
+body.dark-mode .markdown-section h2,
+body.dark-mode .markdown-section h3,
+body.dark-mode .markdown-section h4,
+body.dark-mode .markdown-section h5,
+body.dark-mode .markdown-section h6,
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+  color: #FFFFFF !important;
+}
+
+/* 黑暗模式 - H1 特殊处理 */
+body.dark-mode .markdown-section h1 {
+  color: #FFFFFF !important;
+}
+
+body.dark-mode .markdown-section h1::before {
+  background: #A78BFA !important;
+}
+
+/* 黑暗模式 - 段落和列表颜色 */
+body.dark-mode .markdown-section p,
+body.dark-mode .markdown-section li,
+body.dark-mode .markdown-section td {
+  color: #F0F0F0 !important;
+}
+
+/* 黑暗模式 - 引用块 */
+body.dark-mode .markdown-section blockquote {
+  background: rgba(139, 92, 246, 0.15);
+}
+
+body.dark-mode .markdown-section blockquote p {
+  color: #FFFFFF !important;
+}
+
+/* 黑暗模式 - 表格 */
+body.dark-mode .markdown-section table {
+  background: rgba(30, 30, 46, 0.9);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+body.dark-mode .markdown-section table th {
+  color: #FFFFFF !important;
+}
+
+body.dark-mode .markdown-section table td {
+  color: #F0F0F0 !important;
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 黑暗模式 - 代码 */
+body.dark-mode .markdown-section p code,
+body.dark-mode .markdown-section li code {
+  background: rgba(139, 92, 246, 0.2);
+  color: #A78BFA;
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+/* 黑暗模式 - 链接 */
+body.dark-mode .markdown-section a {
+  color: #A78BFA;
+}
+
+body.dark-mode .markdown-section a:hover {
+  color: #C4B5FD;
+}
+
+body.dark-mode .anime-helper-bubble {
+  background: rgba(30, 30, 46, 0.95);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .anime-helper-bubble::after {
+  border-bottom-color: rgba(30, 30, 46, 0.95);
+}
+
+body.dark-mode .anime-helper-bubble-text {
+  color: #FFFFFF !important;
+}
+
+body.dark-mode .theme-toggle {
+  background: rgba(30, 30, 46, 0.85);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 黑暗模式 - 侧边栏菜单 */
+body.dark-mode .sidebar-nav > ul > li > a {
+  color: #F0F0F0 !important;
+}
+
+body.dark-mode .sidebar-nav > ul > li > a:hover {
+  color: #A78BFA !important;
+}
+
+body.dark-mode .sidebar-nav > ul > li > a.active {
+  color: #A78BFA !important;
+}
+
+body.dark-mode .sidebar-nav ul li a {
+  color: #E0E0E0 !important;
+}
+
+body.dark-mode .sidebar-nav ul li a:hover {
+  color: #A78BFA !important;
+}
+
+body.dark-mode .sidebar-nav ul li a.active {
+  color: #A78BFA !important;
+}
+
+/* ==================== 滚动条美化 ==================== */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--theme-color-lighter);
+  border-radius: 50%;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-color-light);
+}
+
+/* ==================== 加载动画 ==================== */
+#app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 16px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* ==================== 响应式设计 ==================== */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px !important;
+    margin: 10px;
+    border-radius: 16px;
+    height: calc(100vh - 20px) !important;
+    max-height: calc(100vh - 20px) !important;
+    top: 10px !important;
+    left: 10px !important;
+  }
+  
+  .markdown-section {
+    margin: 10px 10px 10px 230px;
+    padding: 24px;
+    border-radius: 24px;
+  }
+  
+  .markdown-section h1 {
+    font-size: 24px;
+  }
+  
+  .markdown-section h2 {
+    font-size: 18px;
+  }
+  
+  .anime-helper {
+    top: 10px;
+    right: 10px;
+  }
+  
+  .anime-helper-container {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .anime-helper-bubble {
+    display: none;
+  }
+  
+  .theme-toggle {
+    right: 150px;
+    top: 10px;
+  }
+}
+
+/* ==================== 动画效果 ==================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.markdown-section {
+  animation: fadeIn 0.4s ease;
+}
+
+/* 平滑过渡 */
+a, button, input {
+  transition: all 0.2s ease;
+}
+
+/* 黑暗模式 - 最强标题白色覆盖（放在最后确保最高优先级） */
+body.dark-mode .content h1,
+body.dark-mode .content h2,
+body.dark-mode .content h3,
+body.dark-mode .content h4,
+body.dark-mode .content h5,
+body.dark-mode .content h6,
+body.dark-mode #main h1,
+body.dark-mode #main h2,
+body.dark-mode #main h3,
+body.dark-mode #main h4,
+body.dark-mode #main h5,
+body.dark-mode #main h6 {
+  color: #FFFFFF !important;
+}

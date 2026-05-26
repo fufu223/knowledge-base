@@ -1,0 +1,105 @@
+site_name: Fastsun Platform 知识库
+site_description: Fastsun 平台框架完整技术文档
+site_author: Fastsun Team
+site_url: https://yourusername.github.io/fastsun-kb
+
+repo_name: fastsun-platform/knowledge-base
+repo_url: https://github.com/yourusername/fastsun-platform
+
+theme:
+  name: material
+  language: zh
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.tooltips
+
+nav:
+  - 首页: index.md
+  - 快速开始: QUICKSTART.md
+  - 架构设计:
+    - 架构概览: architecture/overview.md
+    - 多租户架构: architecture/multi-tenancy.md
+    - 安全架构: architecture/security.md
+  - 核心模块:
+    - 基础模块: modules/fastsun-base.md
+    - 认证授权: modules/fastsun-oauth.md
+    - 工作流引擎: modules/fastsun-workflow.md
+    - 用户中心: modules/fastsun-ucenter.md
+    - 消息通知: modules/fastsun-message.md
+    - 低代码平台: modules/fastsun-lowcode.md
+  - 基础设施:
+    - API 网关: modules/fastsun-gateway.md
+    - 定时任务: modules/fastsun-quartz.md
+    - 工具集成: modules/fastsun-tools.md
+    - 动态配置: modules/fastsun-dynamic.md
+  - 业务模块:
+    - 微信集成: modules/fastsun-wechat.md
+    - 附件管理: modules/fastsun-affix.md
+    - 仪表盘: modules/fastsun-dashboard.md
+    - 表单管理: modules/fastsun-form.md
+    - Excel 模板: modules/fastsun-excel-template.md
+  - 数据服务:
+    - 日志服务: modules/fastsun-loggers.md
+    - 数据同步: modules/fastsun-sync.md
+    - 序列号: modules/fastsun-sequence.md
+    - 报表服务: modules/fastsun-report.md
+    - UReport 报表: modules/fastsun-ureport.md
+  - 高级功能:
+    - 规则引擎: modules/fastsun-ruleflow.md
+    - 提醒服务: modules/fastsun-reminder.md
+    - 电子签名: modules/fastsun-sign.md
+    - XXL-JOB: modules/fastsun-xxl-job.md
+  - 微服务:
+    - 服务管理: modules/fastsun-service.md
+    - 权限拦截: modules/fastsun-authority.md
+  - 开发支持:
+    - 领域模型: modules/fastsun-domain.md
+    - 核心基础: modules/fastsun-core.md
+    - 扩展功能: modules/fastsun-xft.md
+    - 测试支持: modules/fastsun-test.md
+  - 开发指南:
+    - 入门指南: development/getting-started.md
+  - 配置参考:
+    - 配置项大全: configuration/properties.md
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - tables
+  - footnotes
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/yourusername/fastsun-platform
+    - icon: fontawesome/brands/gitlab
+      link: https://gitlab.com/yourusername/fastsun-platform
+
+copyright: Copyright &copy; 2026 Fastsun Platform
