@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>锚点功能测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+        .test-section h3 {
+            margin-top: 0;
+            color: #8B5CF6;
+        }
+        button {
+            background: #8B5CF6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #7C3AED;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 锚点定位功能测试</h1>
+    
+    <div class="test-section">
+        <h3>测试说明</h3>
+        <p>打开知识库页面后，在浏览器控制台（F12）运行以下测试代码：</p>
+    </div>
+
+    <div class="test-section">
+        <h3>测试 1: 检查内容区域是否存在</h3>
+        <button onclick="copyTest1()">复制测试代码</button>
+        <div class="result" id="test1">
+const contentArea = document.querySelector('.markdown-section');
+console.log('内容区域:', contentArea);
+console.log('是否可以滚动:', contentArea.scrollHeight > contentArea.clientHeight);
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>测试 2: 查找带 ID 的标题</h3>
+        <button onclick="copyTest2()">复制测试代码</button>
+        <div class="result" id="test2">
+const headings = document.querySelectorAll('.markdown-section h1[id], .markdown-section h2[id], .markdown-section h3[id]');
+console.log('找到', headings.length, '个带ID的标题');
+headings.forEach((h, i) => {
+    console.log(i + 1, ':', h.id, '-', h.textContent.trim());
+});
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>测试 3: 手动触发锚点滚动</h3>
+        <button onclick="copyTest3()">复制测试代码</button>
+        <div class="result" id="test3">
+// 找到第一个 H2 标题并滚动到它
+const firstH2 = document.querySelector('.markdown-section h2[id]');
+if (firstH2) {
+    console.log('准备滚动到:', firstH2.textContent.trim());
+    
+    const contentArea = document.querySelector('.markdown-section');
+    const elementRect = firstH2.getBoundingClientRect();
+    const containerRect = contentArea.getBoundingClientRect();
+    const scrollTop = contentArea.scrollTop;
+    const offsetTop = elementRect.top - containerRect.top + scrollTop - 100;
+    
+    console.log('滚动位置:', offsetTop);
+    contentArea.scrollTo({ top: offsetTop, behavior: 'smooth' });
+} else {
+    console.log('未找到带ID的H2标题');
+}
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>测试 4: 模拟点击侧边栏链接</h3>
+        <button onclick="copyTest4()">复制测试代码</button>
+        <div class="result" id="test4">
+// 找到侧边栏的第一个二级菜单链接
+const sidebarLink = document.querySelector('.sidebar-nav ul li ul li a');
+if (sidebarLink) {
+    console.log('侧边栏链接:', sidebarLink.href);
+    console.log('链接文本:', sidebarLink.textContent.trim());
+    
+    // 模拟点击
+    sidebarLink.click();
+    
+    // 延迟检查是否滚动
+    setTimeout(() => {
+        const contentArea = document.querySelector('.markdown-section');
+        console.log('当前滚动位置:', contentArea.scrollTop);
+    }, 500);
+} else {
+    console.log('未找到侧边栏链接');
+}
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>测试 5: 检查 URL 中的锚点</h3>
+        <button onclick="copyTest5()">复制测试代码</button>
+        <div class="result" id="test5">
+console.log('当前 URL:', window.location.href);
+console.log('Hash:', window.location.hash);
+
+// 解析锚点
+const hash = window.location.hash;
+let anchorId = null;
+
+if (hash.includes('?id=')) {
+    anchorId = hash.split('?id=')[1].split('&')[0];
+} else if (hash.includes('#') && hash.lastIndexOf('#') > 0) {
+    anchorId = hash.substring(hash.lastIndexOf('#') + 1);
+}
+
+console.log('解析出的锚点ID:', anchorId);
+
+if (anchorId) {
+    const element = document.getElementById(anchorId) || 
+                    document.getElementById(decodeURIComponent(anchorId));
+    console.log('目标元素:', element);
+}
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>快速测试步骤</h3>
+        <ol>
+            <li>打开 <a href="http://localhost:3000" target="_blank">http://localhost:3000</a></li>
+            <li>按 F12 打开开发者工具</li>
+            <li>切换到 Console 标签</li>
+            <li>依次复制上面的测试代码并运行</li>
+            <li>观察控制台输出和页面滚动效果</li>
+        </ol>
+    </div>
+
+    <script>
+        function copyTest1() {
+            copyToClipboard(document.getElementById('test1').innerText);
+        }
+        function copyTest2() {
+            copyToClipboard(document.getElementById('test2').innerText);
+        }
+        function copyTest3() {
+            copyToClipboard(document.getElementById('test3').innerText);
+        }
+        function copyTest4() {
+            copyToClipboard(document.getElementById('test4').innerText);
+        }
+        function copyTest5() {
+            copyToClipboard(document.getElementById('test5').innerText);
+        }
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('测试代码已复制到剪贴板！');
+            }).catch(err => {
+                console.error('复制失败:', err);
+            });
+        }
+    </script>
+</body>
+</html>

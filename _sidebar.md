@@ -1,4 +1,4 @@
-* [首页](README.md)
+* [首页](/)
 
 * **快速开始**
   * [快速使用指南](docs/guides/QUICKSTART.md)
