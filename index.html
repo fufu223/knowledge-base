@@ -6,183 +6,182 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="description" content="Fastsun 平台框架完整技术文档">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  
+
   <!-- Docsify 主题 -->
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
-  
+
   <!-- 现代化苹果风格主题 -->
   <link rel="stylesheet" href="theme-modern.css">
 </head>
 <body>
-  <div id="app">加载中...</div>
-  
-  <!-- 动漫助手 -->
-  <div class="anime-helper" onclick="toggleAnimeMessage()">
-    <div class="anime-helper-bubble">
-      <div class="anime-helper-bubble-text" id="anime-message">💪 工作辛苦了！</div>
-    </div>
-    <div class="anime-helper-container">
-      <img src="images/anime-helper.png" alt="文档助手" class="anime-helper-img">
-    </div>
+<div id="app">加载中...</div>
+
+<!-- 动漫助手 -->
+<div class="anime-helper" onclick="toggleAnimeMessage()">
+  <div class="anime-helper-bubble">
+    <div class="anime-helper-bubble-text" id="anime-message">💪 工作辛苦了！</div>
   </div>
-  
-  <!-- 黑暗模式开关 -->
-  <button class="theme-toggle" onclick="toggleTheme()" title="切换主题">
-    <span id="theme-icon">🌙</span>
-  </button>
-  
-  <script>
-    window.$docsify = {
-      name: 'Fastsun 知识库',
-      repo: 'https://github.com/yourusername/fastsun-platform',
-      
-      // 基础路径配置（重要！）
-      // 本地预览时设置为 '/'
-      // GitHub Pages 部署时设置为 '/仓库名/'
-      // 例如：仓库名为 fastsun-docs，则设置为 '/fastsun-docs/'
-      basePath: '/knowledge-base',  // ⚠️ 部署到GitHub Pages时需要修改为 '/仓库名/'
-      
-      // 路由别名配置（解决路径问题）
-      alias: {
-        '/.*/_sidebar.md': '/sidebar.md',
-        '/.*/sidebar.md': '/sidebar.md'
-      },
-      
-      // 侧边栏配置
-      loadSidebar: true,
-      loadNavbar: false,
-      homepage: 'README.md',  // 首页文件
-      subMaxLevel: 3,  // 侧边栏最大层级
-      auto2top: true,  // 切换页面后自动回到顶部
-      
-      // 外部链接处理
-      externalLinkTarget: '_blank',
-      
-      // 路由模式
-      routerMode: 'hash',
-      
-      // 搜索功能
-      search: {
-        maxAge: 86400000, // 缓存一天
-        paths: 'auto',
-        placeholder: '搜索文档...',
-        noData: '找不到结果',
-        depth: 6,
-        hideOtherSidebarContent: false,
-        namespace: 'fastsun-kb'
-      },
-      
-      // 代码高亮
-      markdown: {
-        renderer: {
-          code: function(code, lang) {
-            if (lang === 'java') {
-              return '<pre class="hljs"><code>' + 
-                Prism.highlight(code, Prism.languages.java, 'java') + 
-                '</code></pre>';
-            }
-            return '<pre class="hljs"><code>' + code + '</code></pre>';
+  <div class="anime-helper-container">
+    <img src="images/anime-helper.png" alt="文档助手" class="anime-helper-img">
+  </div>
+</div>
+
+<!-- 黑暗模式开关 -->
+<button class="theme-toggle" onclick="toggleTheme()" title="切换主题">
+  <span id="theme-icon">🌙</span>
+</button>
+
+<script>
+  window.$docsify = {
+    name: 'Fastsun 知识库',
+    repo: 'https://github.com/yourusername/fastsun-platform',
+
+    // 基础路径配置（重要！）
+    // 本地预览时设置为 '/'
+    // GitHub Pages 部署时设置为 '/仓库名/'
+    // 例如：仓库名为 fastsun-docs，则设置为 '/fastsun-docs/'
+    basePath: '/',  // ⚠️ 部署到GitHub Pages时需要修改为 '/仓库名/'
+
+    // 路由别名配置（解决路径问题）
+    alias: {
+      '/.*/_sidebar.md': '/sidebar.md'
+    },
+
+    // 侧边栏配置
+    loadSidebar: 'sidebar.md',
+    loadNavbar: false,
+    homepage: 'README.md',  // 首页文件
+    subMaxLevel: 3,  // 侧边栏最大层级
+    auto2top: true,  // 切换页面后自动回到顶部
+
+    // 外部链接处理
+    externalLinkTarget: '_blank',
+
+    // 路由模式
+    routerMode: 'hash',
+
+    // 搜索功能
+    search: {
+      maxAge: 86400000, // 缓存一天
+      paths: 'auto',
+      placeholder: '搜索文档...',
+      noData: '找不到结果',
+      depth: 6,
+      hideOtherSidebarContent: false,
+      namespace: 'fastsun-kb'
+    },
+
+    // 代码高亮
+    markdown: {
+      renderer: {
+        code: function(code, lang) {
+          if (lang === 'java') {
+            return '<pre class="hljs"><code>' +
+                    Prism.highlight(code, Prism.languages.java, 'java') +
+                    '</code></pre>';
           }
+          return '<pre class="hljs"><code>' + code + '</code></pre>';
         }
-      },
-      
-      // 分页导航
-      pagination: {
-        previousText: '上一篇',
-        nextText: '下一篇',
-        crossChapter: true,
-        crossChapterText: true
-      },
-      
-      // 字数统计
-      count: {
-        countable: true,
-        fontsize: '0.9em',
-        color: 'rgb(90,90,90)',
-        language: 'chinese'
-      },
-      
-      // 图片缩放
-      zoomImage: {
-        maxWidth: '100%',
-        maxHeight: '100%'
       }
+    },
+
+    // 分页导航
+    pagination: {
+      previousText: '上一篇',
+      nextText: '下一篇',
+      crossChapter: true,
+      crossChapterText: true
+    },
+
+    // 字数统计
+    count: {
+      countable: true,
+      fontsize: '0.9em',
+      color: 'rgb(90,90,90)',
+      language: 'chinese'
+    },
+
+    // 图片缩放
+    zoomImage: {
+      maxWidth: '100%',
+      maxHeight: '100%'
     }
-  </script>
-  
-  <!-- 动漫助手脚本 -->
-  <script>
-    const animeMessages = [
-      '💪 工作辛苦了！',
-      '☕ 休息一下吧~',
-      '✨ 你做得很棒！',
-      '🌟 继续加油哦！',
-      '💖 注意身体呀~',
-      '🎯 保持专注！',
-      '😊 开心工作~',
-      '🌈 美好的一天！'
-    ];
-    let messageIndex = 0;
-    
-    function toggleAnimeMessage() {
-      messageIndex = (messageIndex + 1) % animeMessages.length;
-      const bubble = document.getElementById('anime-message');
-      bubble.style.opacity = '0';
-      bubble.style.transform = 'translateY(-10px)';
-      
-      setTimeout(() => {
-        bubble.textContent = animeMessages[messageIndex];
-        bubble.style.opacity = '1';
-        bubble.style.transform = 'translateY(0)';
-      }, 200);
+  }
+</script>
+
+<!-- 动漫助手脚本 -->
+<script>
+  const animeMessages = [
+    '💪 工作辛苦了！',
+    '☕ 休息一下吧~',
+    '✨ 你做得很棒！',
+    '🌟 继续加油哦！',
+    '💖 注意身体呀~',
+    '🎯 保持专注！',
+    '😊 开心工作~',
+    '🌈 美好的一天！'
+  ];
+  let messageIndex = 0;
+
+  function toggleAnimeMessage() {
+    messageIndex = (messageIndex + 1) % animeMessages.length;
+    const bubble = document.getElementById('anime-message');
+    bubble.style.opacity = '0';
+    bubble.style.transform = 'translateY(-10px)';
+
+    setTimeout(() => {
+      bubble.textContent = animeMessages[messageIndex];
+      bubble.style.opacity = '1';
+      bubble.style.transform = 'translateY(0)';
+    }, 200);
+  }
+
+  // 黑暗模式切换
+  function toggleTheme() {
+    const body = document.body;
+    const icon = document.getElementById('theme-icon');
+    body.classList.toggle('dark-mode');
+
+    if (body.classList.contains('dark-mode')) {
+      icon.textContent = '☀️';
+      localStorage.setItem('theme', 'dark');
+    } else {
+      icon.textContent = '🌙';
+      localStorage.setItem('theme', 'light');
     }
-    
-    // 黑暗模式切换
-    function toggleTheme() {
-      const body = document.body;
-      const icon = document.getElementById('theme-icon');
-      body.classList.toggle('dark-mode');
-      
-      if (body.classList.contains('dark-mode')) {
-        icon.textContent = '☀️';
-        localStorage.setItem('theme', 'dark');
-      } else {
-        icon.textContent = '🌙';
-        localStorage.setItem('theme', 'light');
-      }
+  }
+
+  // 页面加载时恢复主题设置
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark-mode');
+      document.getElementById('theme-icon').textContent = '☀️';
     }
-    
-    // 页面加载时恢复主题设置
-    window.addEventListener('DOMContentLoaded', () => {
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('theme-icon').textContent = '☀️';
-      }
-    });
-  </script>
-  
-  <!-- Docsify 核心 -->
-  <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
-  
-  <!-- 搜索插件 -->
-  <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
-  
-  <!-- 代码高亮 -->
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-java.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-yaml.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
-  
-  <!-- 分页插件 -->
-  <script src="//cdn.jsdelivr.net/npm/docsify-pagination@2/dist/docsify-pagination.min.js"></script>
-  
-  <!-- 字数统计 -->
-  <script src="//cdn.jsdelivr.net/npm/docsify-count@latest/dist/countable.min.js"></script>
-  
-  <!-- 图片缩放 -->
-  <script src="//cdn.jsdelivr.net/npm/docsify-zoom-image@1/dist/docsify-zoom-image.min.js"></script>
-  
-  <!-- 外部链接图标 -->
-  <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/plugins/external-script.min.js"></script>
+  });
+</script>
+
+<!-- Docsify 核心 -->
+<script src="//cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
+
+<!-- 搜索插件 -->
+<script src="//cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
+
+<!-- 代码高亮 -->
+<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-java.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-yaml.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+
+<!-- 分页插件 -->
+<script src="//cdn.jsdelivr.net/npm/docsify-pagination@2/dist/docsify-pagination.min.js"></script>
+
+<!-- 字数统计 -->
+<script src="//cdn.jsdelivr.net/npm/docsify-count@latest/dist/countable.min.js"></script>
+
+<!-- 图片缩放 -->
+<script src="//cdn.jsdelivr.net/npm/docsify-zoom-image@1/dist/docsify-zoom-image.min.js"></script>
+
+<!-- 外部链接图标 -->
+<script src="//cdn.jsdelivr.net/npm/docsify@4/lib/plugins/external-script.min.js"></script>
 </body>
 </html>
