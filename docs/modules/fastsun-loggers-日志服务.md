@@ -22,6 +22,15 @@ fastsun-loggers 是 Fastsun 平台的日志服务模块，提供多种日志存�
 
 ---
 
+## 应用场景
+
+- **操作审计追踪**：记录用户关键操作（增删改），满足合规审计需求
+- **登录安全监控**：记录用户登录行为，监控异常登录和密码错误
+- **业务数据溯源**：通过操作日志追溯数据变更历史，辅助问题排查
+- **多存储策略**：高频日志可写入 MongoDB 降低 MySQL 压力，低频查询日志可归档存储
+
+---
+
 ## 核心功能
 
 ### 1. 操作日志
@@ -86,14 +95,16 @@ FastsunPage<OperationLogDTO> page = operationLogService.page(query);
 
 ## 配置项
 
+> 日志存储配置，根据所选存储类型配置对应参数。
+
 ### MySQL 存储
 
 ```yaml
 fastsun:
   platform:
     logger:
-      storage-type: mysql
-      table-prefix: sys_
+      storage-type: mysql            # 日志存储类型：mysql / mongo <span class="config-required">(必需)</span>
+      table-prefix: sys_             # 日志表名前缀（可选，默认 sys_）
 ```
 
 ### MongoDB 存储
@@ -102,8 +113,8 @@ fastsun:
 fastsun:
   platform:
     logger:
-      storage-type: mongo
-      collection-prefix: log_
+      storage-type: mongo            # 日志存储类型：mysql / mongo <span class="config-required">(必需)</span>
+      collection-prefix: log_        # 集合名前缀（可选，默认 log_）
 ```
 
 ---

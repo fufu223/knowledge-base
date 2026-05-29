@@ -25,6 +25,22 @@ fastsun-lowcode 是 Fastsun 平台的低代码开发模块，提供可视化表�
 
 ---
 
+## 应用场景
+
+### 1. 可视化表单构建
+适用于企业快速搭建表单类应用，无需编写前端代码即可完成数据录入界面的设计和部署。
+
+### 2. 动态数据视图管理
+适用于列表展示、数据查询、统计报表等场景，通过配置即可实现数据的灵活展示和多维筛选。
+
+### 3. 代码自动化生成
+适用于后端 CRUD 代码的快速生成，减少重复性开发工作，提高开发效率。
+
+### 4. 模型驱动的应用扩展
+通过数据模型的自定义扩展，实现业务应用的灵活调整，满足快速变化的业务需求。
+
+---
+
 ## 主要类
 
 ### 模型管理
@@ -404,17 +420,17 @@ item.setValidator("formatMobile(${mobile})");
 fastsun:
   platform:
     lowcode:
-      # 是否启用代码生成功能
+      # 是否启用代码生成功能 — 控制代码生成模块的开关，关闭后不可生成代码 <span class="config-required">(必需)</span>
       code-generation:
         enabled: true
       
-      # 代码模板路径
+      # 代码模板路径 — 代码生成时使用的模板文件所在路径，支持 classpath 和文件系统路径 <span class="config-required">(必需)</span>
       template-path: classpath:/templates/code
       
-      # 默认包名
+      # 默认包名 — 生成代码时的默认基础包名，可在生成时覆盖 <span class="config-required">(必需)</span>
       default-package: com.example
       
-      # 作者信息
+      # 作者信息 — 生成代码时 @author 注解中使用的作者名称
       author: System
 ```
 
@@ -425,8 +441,8 @@ fastsun:
   platform:
     view:
       cache:
-        enabled: true
-        ttl: 3600  # 缓存过期时间（秒）
+        enabled: true     # 是否启用视图配置缓存，开启后可提高视图解析性能
+        ttl: 3600         # 缓存过期时间（秒），默认 3600
 ```
 
 ---
@@ -598,3 +614,15 @@ public class ${className}Controller extends AbstractDTOCRUDController<${classNam
 - [架构概述](../architecture/overview.md)
 - [快速开始](../development/getting-started.md)
 - [配置指南](../configuration/properties.md)
+
+---
+
+## 模块引用关系
+
+| 模块名称 | 引用关系 | 说明 |
+|---------|--------|------|
+| fastsun-workflow | 依赖 | 低代码平台可通过工作流模块发起审批流程 |
+| fastsun-system | 依赖 | 提供用户、组织等基础数据，用于表单权限控制 |
+| fastsun-message | 依赖 | 低代码应用操作时发送消息通知 |
+| fastsun-sequence | 依赖 | 生成模型记录的业务编号 |
+| fastsun-reminder | 依赖 | 低代码应用的定时提醒服务 |

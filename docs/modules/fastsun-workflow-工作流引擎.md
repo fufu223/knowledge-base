@@ -21,6 +21,22 @@ fastsun-workflow 是 Fastsun 平台的工作流模块，基于 Activiti 7.x 实�
 
 ---
 
+## 应用场景
+
+### 1. 企业办公流程自动化
+适用于请假审批、报销审批、合同审批等企业内部办公流程的自动化管理，支持自定义审批链路和多级审批。
+
+### 2. 业务履约流程管理
+适用于订单处理、采购审批、供应商准入等业务流程，实现业务流转的标准化和可追溯。
+
+### 3. 动态会签与加签
+支持在流程运行过程中动态添加审批节点，适用于需要多人会签或临时加签的复杂审批场景。
+
+### 4. 多租户流程引擎
+为 SaaS 平台提供多租户隔离的工作流引擎，每个租户可拥有独立的流程定义和运行实例。
+
+---
+
 ## 主要类
 
 ### 服务层
@@ -405,16 +421,16 @@ pageNum=1&pageSize=10&assignee={userId}
 ```yaml
 spring:
   activiti:
-    # 是否检查流程定义
+    # 是否检查流程定义 — 是否在应用启动时自动检查并部署流程定义文件 <span class="config-required">(必需)</span>
     check-process-definitions: true
     
-    # 数据库 schema 更新策略
+    # 数据库 schema 更新策略 — 是否自动更新 Activiti 数据库表结构，生产环境建议关闭 <span class="config-required">(必需)</span>
     database-schema-update: true
     
-    # 历史记录级别：none, activity, audit, full
+    # 历史记录级别 — none（不记录）、activity（仅活动节点）、audit（审计日志）、full（完整记录） <span class="config-required">(必需)</span>
     history-level: full
     
-    # 异步执行器
+    # 异步执行器 — 是否启用异步执行器，用于处理定时边界事件和异步消息
     async-executor-activate: true
 ```
 
@@ -424,13 +440,13 @@ spring:
 fastsun:
   platform:
     workflow:
-      # 是否为每个租户创建独立的流程引擎
+      # 多租户开关 — 是否为每个租户创建独立的流程引擎实例，开启后租户间流程数据完全隔离 <span class="config-required">(必需)</span>
       multi-tenant: true
       
       # 流程缓存配置
       cache:
-        enabled: true
-        ttl: 3600  # 缓存过期时间（秒）
+        enabled: true   # 是否启用流程缓存，默认 true
+        ttl: 3600       # 缓存过期时间（秒），默认 3600
 ```
 
 ---
@@ -669,3 +685,15 @@ public class MyTaskListener implements TaskListener {
 - [架构概述](../architecture/overview.md)
 - [快速开始](../development/getting-started.md)
 - [配置指南](../configuration/properties.md)
+
+---
+
+## 模块引用关系
+
+| 模块名称 | 引用关系 | 说明 |
+|---------|--------|------|
+| fastsun-system | 依赖 | 提供用户、角色、部门等基础组织架构数据，用于流程审批节点的候选人/组解析 |
+| fastsun-message | 依赖 | 流程任务到达和完成时发送消息通知 |
+| fastsun-reminder | 依赖 | 流程任务超时未处理时的提醒服务 |
+| fastsun-lowcode | 被依赖 | 低代码平台通过 API 调用启动流程和查询任务 |
+| fastsun-sequence | 依赖 | 生成流程实例编号和业务编号 |

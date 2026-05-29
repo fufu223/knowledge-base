@@ -19,6 +19,22 @@ fastsun-sequence 是 Fastsun 平台的序列号生成模块，提供分布式唯
 
 ---
 
+## 应用场景
+
+### 1. 订单号/流水号生成
+适用于电商订单、支付流水、物流运单等需要业务含义唯一编号的场景，支持灵活的前缀和时间格式配置。
+
+### 2. 分布式 ID 生成
+适用于多实例部署的微服务架构，通过 Redis 生成器保证跨实例的序列号全局唯一。
+
+### 3. 分库分表场景
+适用于数据量大的业务系统，在分库分表架构中生成带分片信息的序列号，支持数据路由和水平扩展。
+
+### 4. 高并发批量生成
+适用于需要批量获取序列号的高并发场景，通过预取机制减少数据库/Redis 访问频率，提升性能。
+
+---
+
 ## 核心功能
 
 ### 1. 基本使用
@@ -350,20 +366,19 @@ public class FallbackSequenceService {
 fastsun:
   platform:
     sequence:
-      # 生成器类型: local, redis
+      # 生成器类型 — local（本地生成器）、redis（Redis 生成器） <span class="config-required">(必需)</span>
       type: redis
-      # 默认步长
+      # 默认步长 — 序列号每次递增的步长，默认 1 <span class="config-required">(必需)</span>
       default-step: 1
-      # Redis 配置
+      # Redis 配置（当 type 为 redis 时必填）
       redis:
-        key-prefix: "seq:"
-        step: 10
-        # 连接超时
-        timeout: 3000
-      # 本地配置
+        key-prefix: "seq:"    # Redis key 前缀，用于区分不同业务序列号 <span class="config-required">(必需)</span>
+        step: 10               # Redis 生成器步长，决定每次 INCRBY 的增量 <span class="config-required">(必需)</span>
+        timeout: 3000          # Redis 连接超时时间（毫秒），默认 3000
+      # 本地配置（当 type 为 local 时生效）
       local:
-        step: 100
-        cache-size: 1000
+        step: 100              # 本地生成器步长，每次从数据库预取的范围大小
+        cache-size: 1000       # 本地缓存大小，预取的序列号数量
 ```
 
 ---
@@ -378,3 +393,15 @@ fastsun-sequence 模块提供了高效的序列号生成能力：
 - ✅ 降级容错机制
 
 适用于需要生成唯一标识符的业务场景。
+
+---
+
+## 模块引用关系
+
+| 模块名称 | 引用关系 | 说明 |
+|---------|--------|------|
+| fastsun-system | 依赖 | 提供租户上下文用于隔离不同租户的序列号 |
+| fastsun-workflow | 被依赖 | 工作流模块使用序列号生成流程实例编号 |
+| fastsun-lowcode | 被依赖 | 低代码平台使用序列号生成模型记录的业务编号 |
+| fastsun-message | 被依赖 | 消息模块使用序列号生成消息记录编号 |
+| fastsun-reminder | 被依赖 | 提醒服务使用序列号生成提醒记录编号 |

@@ -22,6 +22,22 @@ fastsun-message 是 Fastsun 平台的消息通知模块，提供多种消息渠�
 
 ---
 
+## 应用场景
+
+### 1. 实时消息推送
+适用于需要即时通知用户的场景，如订单状态变更、审批任务到达、系统公告等实时消息推送。
+
+### 2. 多渠道消息通知
+支持短信、邮件、站内信、企业微信/钉钉等多种消息渠道，满足不同场景下的消息触达需求。
+
+### 3. 消息模板化管理
+通过消息模板统一管理各渠道的消息内容格式，支持参数化渲染，提高消息维护效率。
+
+### 4. 业务系统集成通知
+为平台内其他业务模块提供统一的消息发送接口，实现各模块之间的事件驱动通知。
+
+---
+
 ## 主要类
 
 ### WebSocket
@@ -471,10 +487,10 @@ pageNum=1&pageSize=10&status=0
 fastsun:
   platform:
     websocket:
-      enabled: true
-      path: /ws
-      allowed-origins: "*"
-      heartbeat-interval: 30000  # 心跳间隔（毫秒）
+      enabled: true            # 是否启用 WebSocket 服务 <span class="config-required">(必需)</span>
+      path: /ws                # WebSocket 连接端点路径 <span class="config-required">(必需)</span>
+      allowed-origins: "*"     # 允许跨域来源，生产环境建议设置具体域名
+      heartbeat-interval: 30000 # 心跳检测间隔（毫秒），默认 30000
 ```
 
 ### 短信配置
@@ -483,12 +499,12 @@ fastsun:
 fastsun:
   platform:
     sms:
-      provider: aliyun
+      provider: aliyun         # 短信服务提供商，可选：aliyun（阿里云）、tencent（腾讯云） <span class="config-required">(必需)</span>
       aliyun:
-        access-key-id: LTAI***
-        access-key-secret: ***
-        sign-name: 我的网站
-        template-code: SMS_123456
+        access-key-id: LTAI***         # 阿里云 AccessKey ID <span class="config-required">(必需)</span>
+        access-key-secret: ***         # 阿里云 AccessKey Secret <span class="config-required">(必需)</span>
+        sign-name: 我的网站            # 短信签名，需在阿里云短信服务中审核通过 <span class="config-required">(必需)</span>
+        template-code: SMS_123456      # 短信模板编码 <span class="config-required">(必需)</span>
 ```
 
 ### 邮件配置
@@ -496,17 +512,17 @@ fastsun:
 ```yaml
 spring:
   mail:
-    host: smtp.qq.com
-    port: 587
-    username: xxx@qq.com
-    password: authorization-code
+    host: smtp.qq.com          # SMTP 服务器地址 <span class="config-required">(必需)</span>
+    port: 587                  # SMTP 服务器端口，常用端口：25、465（SSL）、587（TLS） <span class="config-required">(必需)</span>
+    username: xxx@qq.com       # 邮箱账号 <span class="config-required">(必需)</span>
+    password: authorization-code # 邮箱授权码或密码 <span class="config-required">(必需)</span>
     properties:
       mail:
         smtp:
-          auth: true
+          auth: true           # 是否启用 SMTP 认证
           starttls:
-            enable: true
-            required: true
+            enable: true       # 是否启用 STARTTLS 加密
+            required: true     # 是否要求必须使用 STARTTLS
 ```
 
 ---
@@ -685,3 +701,15 @@ public void sendMessage(MessageDTO message) {
 - [架构概述](../architecture/overview.md)
 - [快速开始](../development/getting-started.md)
 - [配置指南](../configuration/properties.md)
+
+---
+
+## 模块引用关系
+
+| 模块名称 | 引用关系 | 说明 |
+|---------|--------|------|
+| fastsun-system | 依赖 | 提供用户信息用于消息接收人解析 |
+| fastsun-workflow | 被依赖 | 工作流模块在流程任务到达时调用消息模块发送通知 |
+| fastsun-lowcode | 被依赖 | 低代码平台在应用操作时发送消息通知 |
+| fastsun-reminder | 被依赖 | 提醒服务通过消息模块发送提醒通知 |
+| fastsun-sequence | 依赖 | 生成消息记录的业务编号 |

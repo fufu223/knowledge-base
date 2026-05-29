@@ -7,6 +7,10 @@
   <meta name="description" content="Fastsun 平台框架完整技术文档">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   
+  <!-- 网页图标 -->
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="apple-touch-icon" href="images/logo.png">
+  
   <!-- Docsify 主题 -->
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
   
@@ -15,6 +19,14 @@
 </head>
 <body>
   <div id="app">加载中...</div>
+  
+  <!-- 分支版本标识 -->
+  <div class="branch-badge" id="branch-badge">
+    <span class="branch-label">分支:</span>
+    <select class="branch-select" id="branch-select" onchange="switchBranch(this.value)">
+      <option value="2.3.26-20260509-1-RELEASE" selected>2.3.26-20260509-1-RELEASE</option>
+    </select>
+  </div>
   
   <!-- 动漫助手 -->
   <div class="anime-helper" onclick="toggleAnimeMessage()">
@@ -34,10 +46,9 @@
   <script>
     window.$docsify = {
       name: 'Fastsun 知识库',
-      repo: 'https://github.com/yourusername/fastsun-platform',
+      repo: 'https://github.com/fufu223/knowledge-base',
       
-      // 基础路径配置（重要！）
-      // 本地预览时设置为 '/'
+      // 基础路径配置（重要！）时设置为 '/'
       // GitHub Pages 部署时设置为 '/仓库名/'
       // 例如：仓库名为 knowledge-base，则设置为 '/knowledge-base/'
       basePath: '/knowledge-base/',  // 本地预览使用 '/'，部署时修改为仓库名
@@ -53,7 +64,7 @@
       loadNavbar: false,
       homepage: 'README.md',  // 首页文件
       subMaxLevel: 3,  // 侧边栏最大层级
-      auto2top: true,  // 切换页面后自动回到顶部
+      auto2top: false,  // 由 doneEach 钩子手动控制回到顶部
       
       // 锚点定位偏移量（重要！）
       topMargin: 100,  // 考虑固定元素的高度，避免锚点被遮挡
@@ -230,22 +241,9 @@
       }
     }
     
-    // 滚动到指定元素的通用函数
+    // 滚动到指定元素的通用函数（使用原生 scrollIntoView 避免容器布局偏移）
     function scrollToElement(element) {
-      const contentArea = document.querySelector('.markdown-section');
-      if (!contentArea) return;
-      
-      // 使用 getBoundingClientRect 精确计算位置
-      const elementRect = element.getBoundingClientRect();
-      const containerRect = contentArea.getBoundingClientRect();
-      const scrollTop = contentArea.scrollTop;
-      const offsetTop = elementRect.top - containerRect.top + scrollTop - 100;
-      
-      // 平滑滚动到目标位置
-      contentArea.scrollTo({
-        top: offsetTop,
-        behavior: 'smooth'
-      });
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
     
     // 监听所有锚点链接点击事件（包括侧边栏和页面内链接）
@@ -256,24 +254,14 @@
       const href = link.getAttribute('href');
       if (!href) return;
       
-      // 检查是否是锚点链接
-      let anchorId = null;
+      // 只拦截同页面锚点链接 (如 #section-name)，放行跨页链接给 Docsify 处理
+      // 搜索结果的链接格式为 #/path/to/page?id=xxx，包含 / 或 ?id=，不属于同页面锚点
+      const isSamePageAnchor = href.startsWith('#') && !href.includes('/') && !href.includes('?id=');
       
-      // 情况1: 页面内锚点 #anchor
-      if (href.startsWith('#') && !href.includes('/')) {
-        anchorId = href.substring(1);
-      }
-      // 情况2: Docsify 格式 #/path/file?id=anchor
-      else if (href.includes('?id=')) {
-        anchorId = href.split('?id=')[1].split('&')[0];
-      }
-      // 情况3: #/path/file#anchor
-      else if (href.includes('#') && href.lastIndexOf('#') > 0) {
-        anchorId = href.substring(href.lastIndexOf('#') + 1);
-      }
-      
-      if (anchorId) {
+      if (isSamePageAnchor) {
         e.preventDefault();
+        
+        const anchorId = href.substring(1);
         
         // 尝试多种选择器查找元素
         let targetElement = document.getElementById(anchorId);
@@ -286,7 +274,6 @@
         
         if (targetElement) {
           scrollToElement(targetElement);
-          
           // 更新 URL
           history.pushState(null, null, href);
         } else {

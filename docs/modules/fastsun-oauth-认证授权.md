@@ -21,6 +21,26 @@ fastsun-oauth 是 Fastsun 平台的认证授权模块，基于 OAuth2 + Spring S
 
 ---
 
+## 应用场景
+
+### 1. Web 应用登录认证
+
+为平台的前端应用（管理后台、门户网站等）提供统一的用户登录认证服务，支持用户名密码、短信验证码、微信扫码等多种登录方式。
+
+### 2. 第三方系统集成认证
+
+对外部系统或第三方应用提供 OAuth2 标准的认证授权接口，支持授权码模式和客户端模式，实现跨系统的安全访问控制。
+
+### 3. 微服务间调用鉴权
+
+通过 Token 传递机制实现微服务之间的安全调用，Feign 拦截器自动传递 Token，保障服务间通信的安全性和可追溯性。
+
+### 4. 单点登录（SSO）
+
+基于 OAuth2 授权码模式实现单点登录，用户在认证服务器登录一次即可访问所有接入的子系统，提升用户体验和管理效率。
+
+---
+
 ## 主要类
 
 ### 认证服务器
@@ -464,27 +484,31 @@ Authorization: Bearer {access_token}
 
 ### OAuth2 基础配置
 
+OAuth2 客户端和应用的基础认证配置，包括客户端凭证、Token 有效期和登录策略。
+
 ```yaml
 fastsun:
   platform:
     oauth:
       client:
-        id: fastsun
-        secret: fastsun
+        id: fastsun  # OAuth2 客户端 ID <span class="config-required">(必需)</span>
+        secret: fastsun  # OAuth2 客户端密钥 <span class="config-required">(必需)</span>
       token:
-        validity: 7200              # Access Token 有效期（秒）
-        refresh-validity: 2592000   # Refresh Token 有效期（秒）
-      login-strategy: firstStrategy # 登录策略
+        validity: 7200              # Access Token 有效期（秒），默认 2 小时 <span class="config-required">(必需)</span>
+        refresh-validity: 2592000   # Refresh Token 有效期（秒），默认 30 天 <span class="config-required">(必需)</span>
+      login-strategy: firstStrategy # 登录策略：firstStrategy（踢旧会话）或 lastStrategy（禁止重复登录）
 ```
 
 ### Token 存储配置
+
+Token 的存储方式，支持 Redis 和 JWT 两种模式，根据实际需求选择。
 
 #### Redis 存储
 ```yaml
 spring:
   redis:
-    host: localhost
-    port: 6379
+    host: localhost  # Redis 服务器地址，用于 Token 持久化存储 <span class="config-required">(必需)</span>
+    port: 6379  # Redis 服务器端口
 ```
 
 #### JWT 存储
@@ -493,10 +517,12 @@ fastsun:
   platform:
     oauth:
       jwt:
-        signing-key: your-secret-key
+        signing-key: your-secret-key  # JWT 签名密钥，用于 JWT Token 模式
 ```
 
 ### 安全配置
+
+系统的安全策略配置，包括白名单、IP 白名单和签名验证等。
 
 ```yaml
 fastsun:
@@ -504,18 +530,17 @@ fastsun:
     security:
       # 白名单
       white-list:
-        - /public/**
-        - /login
+        - /public/**  # 公开接口，无需认证即可访问
+        - /login  # 登录接口
       
       # IP 白名单
       ip-white-list:
-        - 127.0.0.1
+        - 127.0.0.1  # 允许访问的 IP 地址
       
       # 签名验证
       signature:
-        enabled: true
-        secret-key: your-secret-key
-```
+        enabled: true  # 是否启用签名验证
+        secret-key: your-secret-key  # 签名密钥
 
 ---
 
@@ -723,3 +748,15 @@ public class CustomTokenEnhancer implements TokenEnhancer {
 - [安全架构](../architecture/security.md)
 - [快速开始](../development/getting-started.md)
 - [配置指南](../configuration/properties.md)
+
+---
+
+## 模块引用关系
+
+| 依赖类型 | 模块 | 说明 |
+|---------|------|------|
+| 调用依赖 | fastsun-ucenter | 用户中心，OAuth 认证依赖于用户信息查询 |
+| 调用依赖 | fastsun-gateway | API 网关，网关层需要调用 OAuth 进行 Token 验证 |
+| 调用依赖 | fastsun-service | 服务管理，服务调用需要传递 Token 鉴权 |
+| 存储依赖 | Redis | Token 存储和会话管理 |
+| 存储依赖 | MySQL | 存储客户端信息、授权码等持久化数据

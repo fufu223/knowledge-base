@@ -201,19 +201,110 @@ generate_kb.bat fastsun-oauth
 
 ## 模块依赖关系
 
+### 依赖关系说明
+
+下表展示了各模块之间的引用和依赖关系：
+
+| 模块 | 依赖模块 | 被依赖模块 | 说明 |
+|------|---------|-----------|------|
+| fastsun-base | Spring Boot/JPA/Hibernate | 所有模块 | 核心基础模块，所有模块都依赖 |
+| fastsun-common | fastsun-base | fastsun-gateway, fastsun-ucenter 等 | 公共配置模块 |
+| fastsun-core | fastsun-base, fastsun-common | - | 平台核心配置封装 |
+| fastsun-domain | fastsun-base | fastsun-ucenter 等 | 领域模型定义 |
+| fastsun-oauth | fastsun-base, fastsun-common | fastsun-gateway | 认证授权，网关依赖 |
+| fastsun-ucenter | fastsun-base, fastsun-common | fastsun-oauth, fastsun-workflow 等 | 用户中心，被多个模块依赖 |
+| fastsun-workflow | fastsun-base, fastsun-ucenter | - | 工作流引擎 |
+| fastsun-lowcode | fastsun-base, fastsun-ucenter | - | 低代码平台 |
+| fastsun-message | fastsun-base | - | 消息通知 |
+| fastsun-gateway | fastsun-oauth, fastsun-common | - | API网关，依赖认证模块 |
+| fastsun-tools | fastsun-base | fastsun-common 等 | 工具集成 |
+| fastsun-quartz | fastsun-base | - | 定时任务 |
+| fastsun-wechat | fastsun-base, fastsun-ucenter | fastsun-oauth | 微信集成 |
+| fastsun-affix | fastsun-base | - | 附件管理 |
+| fastsun-dashboard | fastsun-base | - | 仪表盘 |
+| fastsun-form | fastsun-base | - | 表单管理 |
+| fastsun-loggers | fastsun-base | - | 日志服务 |
+| fastsun-dynamic | fastsun-base | - | 动态配置 |
+| fastsun-sync | fastsun-base | - | 数据同步 |
+| fastsun-sequence | fastsun-base, fastsun-tools/redis | - | 序列号 |
+| fastsun-report | fastsun-base | - | 报表服务 |
+| fastsun-ureport | fastsun-base | - | UReport报表 |
+| fastsun-ruleflow | fastsun-base | - | 规则引擎 |
+| fastsun-reminder | fastsun-base, fastsun-message | - | 提醒服务 |
+| fastsun-sign | fastsun-base | - | 电子签名 |
+| fastsun-service | fastsun-base | - | 服务管理 |
+| fastsun-authority | fastsun-base | - | 权限拦截 |
+| fastsun-xft | fastsun-base | - | 扩展功能 |
+| fastsun-test | fastsun-base | - | 测试支持 |
+| fastsun-synchron | fastsun-base | - | 数据同步框架 |
+| fastsun-xxl-job | fastsun-base | - | XXL-JOB集成 |
+
+### 依赖关系图
+
 ```
-fastsun-base (基础)
-    ↓
-fastsun-common (公共配置)
-    ↓
-fastsun-ucenter (用户中心) ← fastsun-oauth (认证)
-    ↓
-fastsun-workflow (工作流)
-fastsun-lowcode (低代码)
-fastsun-message (消息)
-fastsun-dashboard (仪表盘)
-    ↓
-其他业务模块
+fastsun-base (基础核心)
+    ├── fastsun-common (公共配置)
+    │   ├── fastsun-oauth (认证授权)
+    │   │   └── fastsun-gateway (API网关)
+    │   ├── fastsun-ucenter (用户中心)
+    │   │   ├── fastsun-workflow (工作流引擎)
+    │   │   ├── fastsun-lowcode (低代码平台)
+    │   │   ├── fastsun-wechat (微信集成)
+    │   │   └── ...其他业务模块
+    │   └── fastsun-tools (工具集成)
+    │       ├── fastsun-sequence (序列号)
+    │       └── ...其他工具
+    ├── fastsun-domain (领域模型)
+    ├── fastsun-core (核心基础)
+    ├── fastsun-message (消息通知)
+    │   └── fastsun-reminder (提醒服务)
+    └── 其他基础模块
+```
+
+### 模块分类层级
+
+```
+基础设施层
+  ├── fastsun-base         - 核心基础（工具类、注解、数据权限）
+  ├── fastsun-common       - 公共配置（初始化、白名单、租户）
+  ├── fastsun-core         - 核心封装（平台配置、基础服务）
+  ├── fastsun-domain       - 领域模型（基础实体、DTO）
+  └── fastsun-tools        - 中间件集成（Redis/Kafka/Mongo等）
+
+业务核心层
+  ├── fastsun-ucenter      - 用户中心（用户/组织/角色/租户）
+  ├── fastsun-oauth        - 认证授权（OAuth2、登录、Token）
+  ├── fastsun-workflow     - 工作流引擎（Activiti）
+  ├── fastsun-lowcode      - 低代码平台（表单/视图/代码生成）
+  ├── fastsun-message      - 消息通知（WebSocket/短信/邮件）
+  └── fastsun-dashboard    - 仪表盘（数据可视化）
+
+功能扩展层
+  ├── fastsun-wechat       - 微信集成（公众号/小程序/企业微信）
+  ├── fastsun-affix        - 附件管理（上传/下载/存储）
+  ├── fastsun-form         - 表单管理（动态表单）
+  ├── fastsun-quartz       - 定时任务（Quartz调度）
+  ├── fastsun-reminder     - 提醒服务（多渠道提醒）
+  └── fastsun-ruleflow     - 规则引擎
+
+数据服务层
+  ├── fastsun-loggers      - 日志服务（MySQL/MongoDB存储）
+  ├── fastsun-sync         - 数据同步
+  ├── fastsun-synchron     - 同步任务管理
+  ├── fastsun-sequence     - 序列号生成
+  ├── fastsun-report       - 报表服务
+  └── fastsun-ureport      - UReport报表
+
+微服务基础设施
+  ├── fastsun-gateway      - API网关（路由/鉴权/限流）
+  ├── fastsun-service      - 服务管理（Feign/Ribbon）
+  ├── fastsun-authority    - 权限拦截
+  └── fastsun-xxl-job      - XXL-JOB分布式调度
+
+开发支持
+  ├── fastsun-xft          - 扩展功能
+  ├── fastsun-test         - 测试支持
+  └── fastsun-dynamic      - 动态配置
 ```
 
 ---

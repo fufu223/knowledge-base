@@ -26,6 +26,26 @@ fastsun-ucenter 是 Fastsun 平台的用户中心模块，提供完整的用户�
 
 ---
 
+## 应用场景
+
+### 1. 企业组织与人员管理
+
+为企业管理员提供完整的组织架构和人员管理功能，包括用户增删改查、组织树管理、岗位分配等，支持企业级的人员信息化管理。
+
+### 2. 角色权限分配
+
+通过 RBAC 模型实现灵活的权限管理，管理员可以创建角色并分配资源权限，将角色授予用户，实现细粒度的访问控制。
+
+### 3. 多租户隔离管理
+
+支持 SaaS 多租户模式，不同租户间数据和配置完全隔离，每个租户可独立管理自己的用户、组织和角色，适用于平台型业务场景。
+
+### 4. 系统字典与配置管理
+
+提供统一的字典管理和系统配置功能，支持业务数据的标准化（如性别、状态等枚举值），以及系统级和租户级的配置管理。
+
+---
+
 ## 主要类
 
 ### 用户管理
@@ -394,35 +414,38 @@ pageNum=1&pageSize=10&username=admin&status=1
 
 ### 用户配置
 
+用户密码策略和登录安全配置，用于控制密码强度要求和登录失败锁定机制。
+
 ```yaml
 fastsun:
   platform:
     user:
       # 密码强度要求
       password:
-        min-length: 6
-        require-uppercase: false
-        require-lowercase: false
-        require-digit: false
-        require-special: false
+        min-length: 6  # 密码最小长度，默认 6
+        require-uppercase: false  # 是否需要大写字母
+        require-lowercase: false  # 是否需要小写字母
+        require-digit: false  # 是否需要数字
+        require-special: false  # 是否需要特殊字符
       
       # 登录失败锁定
       login:
-        max-fail-count: 5
-        lock-duration: 1800  # 锁定时间（秒）
+        max-fail-count: 5  # 最大登录失败次数，超过后锁定
+        lock-duration: 1800  # 锁定时间（秒），默认 30 分钟
 ```
 
 ### 租户配置
+
+多租户模式配置，控制是否启用多租户以及主租户标识。
 
 ```yaml
 fastsun:
   platform:
     multi:
       tenant:
-        enable: true           # 是否启用多租户
+        enable: true  # 是否启用多租户模式
     master:
-      tenant: fastsun          # 主租户标识
-```
+      tenant: fastsun  # 主租户标识 <span class="config-required">(必需)</span>
 
 ---
 
@@ -592,3 +615,15 @@ query.addCondition("status", QueryOperator.NE, -1);
 - [架构概述](../architecture/overview.md)
 - [快速开始](../development/getting-started.md)
 - [多租户架构](../architecture/multi-tenancy.md)
+
+---
+
+## 模块引用关系
+
+| 依赖类型 | 模块 | 说明 |
+|---------|------|------|
+| 调用依赖 | fastsun-oauth | 认证授权，用户中心为 OAuth 提供用户信息查询接口 |
+| 调用依赖 | fastsun-gateway | API 网关，网关路由转发用户中心请求 |
+| 调用依赖 | fastsun-service | 服务管理，服务注册需要关联用户信息 |
+| 调用依赖 | fastsun-ruleflow | 规则引擎，规则执行需要查询用户上下文 |
+| 存储依赖 | MySQL | 存储用户、组织、角色、权限等数据

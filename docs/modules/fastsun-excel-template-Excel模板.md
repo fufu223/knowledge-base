@@ -19,6 +19,22 @@ fastsun-excel-template 是 Fastsun 平台的 Excel 模板模块，提供基于�
 
 ---
 
+## 应用场景
+
+### 1. 批量数据导出报表
+在财务、运营等场景中，需要定期导出销售报表、财务报表、用户报表等。通过 Excel 模板配置表头格式、样式和计算公式，只需填充数据即可生成格式规范的报表文件。
+
+### 2. 批量数据导入初始化
+在系统上线数据迁移、批量导入客户信息、商品数据等场景中，用户通过下载模板填写数据后上传，系统自动解析模板字段映射关系，将 Excel 数据批量写入数据库。
+
+### 3. 复杂多 Sheet 报表生成
+在集团报表、多维分析等场景中，需要在同一个 Excel 文件中包含多个 Sheet，每个 Sheet 展示不同的统计维度。通过多 Sheet 模板配置和 Map 数据源，轻松生成复杂的多维度报表。
+
+### 4. 工作流表单导出归档
+在流程审批完成后，需要将流程表单数据导出为 Excel 进行归档或打印。结合工作流集成模块，自动拉取表单字段和审批记录，生成完整的流程归档文件。
+
+---
+
 ## 核心功能
 
 ### 1. 模板管理
@@ -303,19 +319,16 @@ public class OrderValidator implements DataValidator<OrderDTO> {
 
 ---
 
-## 相关配置
+## 配置项
 
 ```yaml
 fastsun:
   platform:
     excel:
       template:
-        # 模板存储路径
-        storage-path: /data/templates
-        # 是否启用缓存
-        cache-enabled: true
-        # 缓存过期时间（秒）
-        cache-expire: 3600
+        storage-path: /data/templates   # 模板文件在服务器上的存储路径 <span class="config-required">(必需)</span>
+        cache-enabled: true             # 是否启用模板缓存，启用后可加速模板加载
+        cache-expire: 3600              # 模板缓存过期时间（秒），默认为 1 小时
 ```
 
 ---
@@ -329,3 +342,12 @@ fastsun-excel-template 模块提供了强大的 Excel 模板功能：
 - ✅ 工作流表单集成
 
 适用于需要定制化 Excel 导出的业务场景。
+
+## 模块引用关系
+
+| 方向 | 模块名称 | 说明 |
+|------|---------|------|
+| 依赖 | fastsun-base | 依赖基础模块的工具类和异常处理 |
+| 依赖 | fastsun-common | 依赖通用模块的公共组件 |
+| 依赖 | fastsun-form | 依赖表单模块的工作流表单数据 |
+| 被依赖 | 业务模块 | 各业务模块通过 Excel 模板实现数据导入导出 |

@@ -15,6 +15,22 @@ fastsun-base 是 Fastsun 平台的基础核心模块，提供通用的工具类�
 
 ---
 
+## 应用场景
+
+### 1. 多租户 SaaS 平台
+在 SaaS 多租户场景中，不同租户之间的业务数据需要完全隔离。fastsun-base 通过 Hibernate 拦截器自动为 SQL 添加租户过滤条件，确保租户间的数据安全，无需在业务代码中手动处理。
+
+### 2. 企业级权限管理
+企业应用中不同角色和岗位对数据的访问权限不同。数据权限处理器支持按全部数据、自定义数据、本部门数据、本部门及下级、仅本人等多种粒度控制，满足复杂的组织权限需求。
+
+### 3. 快速构建 CRUD 业务模块
+通过继承 `AbstractDTOCRUDController` 和 `AbstractFastsunDtoService` 抽象类，开发者无需编写重复的增删改查代码，即可快速构建标准 RESTful API，大幅提升开发效率。
+
+### 4. 微服务统一异常处理
+在微服务架构中，各服务之间需要统一的错误响应格式。fastsun-base 提供 `BusinessException`、`ParameterException` 等标准异常类，结合全局异常处理器，规范所有服务的错误输出。
+
+---
+
 ## 主要类
 
 ### Controller 层
@@ -278,9 +294,9 @@ public class ProductService extends AbstractFastsunDtoService<ProductDTO, Produc
 ```yaml
 fastsun:
   platform:
-    # 是否启用数据权限
+    # 全局数据权限开关，启用后系统会根据用户角色自动过滤数据访问范围 <span class="config-required">(必需)</span>
     data-permission:
-      enabled: true
+      enabled: true       # true 表示启用数据权限过滤，false 表示关闭
 ```
 
 ### 多租户字段隔离配置
@@ -289,8 +305,8 @@ fastsun:
 fastsun:
   platform:
     tenant:
-      # 是否启用字段隔离
-      field-isolation: true
+      # 多租户字段隔离开关，启用后所有 SQL 查询会自动添加 tenant_code 过滤条件 <span class="config-required">(必需)</span>
+      field-isolation: true  # true 表示启用租户字段隔离，false 表示关闭
 ```
 
 ---
@@ -435,3 +451,14 @@ protected void beforePageQuery(QueryParameter query) {
 - [架构概述](../architecture/overview.md)
 - [快速开始](../development/getting-started.md)
 - [多租户架构](../architecture/multi-tenancy.md)
+
+## 模块引用关系
+
+| 方向 | 模块名称 | 说明 |
+|------|---------|------|
+| 被依赖 | fastsun-common | 提供通用工具类和基础依赖 |
+| 被依赖 | fastsun-ucenter | 提供用户信息和租户上下文 |
+| 依赖方 | fastsun-tools | 工具集成模块依赖基础模块的权限和异常处理 |
+| 依赖方 | fastsun-quartz | 定时任务模块依赖基础模块的 Service 抽象 |
+| 依赖方 | fastsun-form | 表单管理模块依赖基础模块的 CRUD 支持 |
+| 依赖方 | fastsun-excel-template | Excel 模板模块依赖基础模块的工具类 |

@@ -14,6 +14,15 @@ fastsun-dynamic 是 Fastsun 平台的动态配置模块，提供动态数据源�
 
 ---
 
+## 应用场景
+
+- **读写分离**：主库写入、从库读取，分摊数据库压力，提升查询性能
+- **多租户数据源隔离**：每个租户独立数据源，实现数据物理隔离
+- **动态路由管理**：在运行时动态新增、修改、删除网关路由，无需重启服务
+- **动态配置刷新**：配置中心变更后通过刷新端点动态更新配置，不中断服务
+
+---
+
 ## 核心功能
 
 ### 1. 动态数据源
@@ -251,17 +260,15 @@ publisher.publishEvent(new RefreshRoutesEvent(this));
 
 ## 相关配置
 
+> 动态数据源和路由核心配置。
+
 ```yaml
 fastsun:
   platform:
     dynamic:
-      # 是否启用动态数据源
-      enabled: true
-      # 默认数据源
-      primary: master
-      # 严格模式
-      strict: false
-```
+      enabled: true                  # 是否启用动态数据源 <span class="config-required">(必需)</span>
+      primary: master                # 默认数据源 <span class="config-required">(必需)</span>
+      strict: false                  # 严格模式：未找到指定数据源时是否抛出异常
 
 ---
 

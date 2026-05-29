@@ -15,6 +15,15 @@ fastsun-wechat 是 Fastsun 平台的微信集成模块，支持微信公众号�
 
 ---
 
+## 应用场景
+
+- **移动端快捷登录**：通过微信小程序或公众号授权实现一键登录，降低用户注册门槛
+- **企业微信集成**：对接企业微信通讯录，实现组织架构同步和消息推送（审批通知、告警等）
+- **微信支付接入**：在电商、缴费等场景中集成微信支付能力
+- **消息触达**：通过公众号模板消息或企业微信应用消息，向用户发送业务通知
+
+---
+
 ## 核心功能
 
 ### 1. 微信公众号
@@ -26,10 +35,11 @@ fastsun:
   platform:
     wechat:
       mp:
-        app-id: your-app-id
-        secret: your-secret
-        token: your-token
-        aes-key: your-aes-key
+        app-id: your-app-id          # 公众号 AppID <span class="config-required">(必需)</span>
+        secret: your-secret          # 公众号 AppSecret <span class="config-required">(必需)</span>
+        token: your-token            # 公众号 Token，用于消息验证
+        aes-key: your-aes-key        # 消息加解密密钥（安全模式需要）
+
 ```
 
 #### 接收消息
@@ -92,9 +102,9 @@ fastsun:
   platform:
     wechat:
       cp:
-        corp-id: your-corp-id
-        agent-id: your-agent-id
-        secret: your-secret
+        corp-id: your-corp-id        # 企业微信 CorpID <span class="config-required">(必需)</span>
+        agent-id: your-agent-id      # 应用 AgentID <span class="config-required">(必需)</span>
+        secret: your-secret          # 应用 Secret <span class="config-required">(必需)</span>
 ```
 
 #### 获取用户信息
@@ -168,3 +178,13 @@ public String payNotify(@RequestBody String xml) {
 
 - [架构概述](../architecture/overview.md)
 - [认证授权](./fastsun-oauth.md)
+
+---
+
+## 模块引用关系
+
+| 依赖类型 | 模块 | 说明 |
+|---------|------|------|
+| 依赖 | fastsun-base | 依赖核心基础模块 |
+| 依赖 | fastsun-ucenter | 依赖用户中心进行用户关联 |
+| 被依赖 | fastsun-oauth | OAuth 认证模块支持微信登录方式 |

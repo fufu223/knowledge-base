@@ -16,6 +16,26 @@ fastsun-gateway 是 Fastsun 平台的 API 网关模块，基于 Spring Cloud Gat
 
 ---
 
+## 应用场景
+
+### 1. 微服务统一入口
+
+API 网关作为微服务架构的统一入口，所有外部请求都通过网关转发到对应的后端服务，实现请求路由、负载均衡和服务发现。
+
+### 2. 统一安全认证
+
+在网关层统一处理所有请求的身份认证和权限校验，避免每个微服务单独实现安全逻辑，降低重复开发和维护成本。
+
+### 3. 流量控制与防护
+
+通过限流和熔断机制保护后端服务不被突发流量冲垮，支持 Redis 限流和 Sentinel 熔断降级，保障系统高可用。
+
+### 4. 跨域与请求审计
+
+统一处理 CORS 跨域请求，记录所有请求日志，便于问题追踪和系统监控。
+
+---
+
 ## 主要类
 
 ### 配置类
@@ -323,56 +343,62 @@ public class CorsConfig {
 
 ### 网关基础配置
 
+网关服务的基础运行配置，包括端口、应用名称和网关过滤器设置。
+
 ```yaml
 server:
-  port: 8080
+  port: 8080  # 网关服务端口 <span class="config-required">(必需)</span>
 
 spring:
   application:
-    name: fastsun-gateway
+    name: fastsun-gateway  # 应用名称，用于 Nacos 服务注册 <span class="config-required">(必需)</span>
     
   cloud:
     gateway:
       # 全局默认过滤器
       default-filters:
-        - AddResponseHeader=X-Response-Time, %{response.time}ms
+        - AddResponseHeader=X-Response-Time, %{response.time}ms  # 添加响应时间头
       
       # 全局 CORS 配置
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: "*"
-            allowedMethods: "*"
-            allowedHeaders: "*"
+            allowedOrigins: "*"  # 允许的跨域来源
+            allowedMethods: "*"  # 允许的 HTTP 方法
+            allowedHeaders: "*"  # 允许的请求头
 ```
 
 ### Nacos 配置
+
+用于服务注册发现和配置中心，实现动态路由和配置管理。
 
 ```yaml
 spring:
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:8848
-        namespace: your-namespace
+        server-addr: localhost:8848  # Nacos 注册中心地址 <span class="config-required">(必需)</span>
+        namespace: your-namespace  # Nacos 命名空间，用于环境隔离
       config:
-        server-addr: localhost:8848
-        file-extension: yaml
+        server-addr: localhost:8848  # Nacos 配置中心地址 <span class="config-required">(必需)</span>
+        file-extension: yaml  # 配置文件格式
 ```
 
 ### Sentinel 配置
+
+用于限流熔断，保护网关和后端服务不被突发流量冲垮。如不使用 Sentinel 可省略此部分。
 
 ```yaml
 spring:
   cloud:
     sentinel:
       transport:
-        dashboard: localhost:8080
-        port: 8719
+        dashboard: localhost:8080  # Sentinel 控制台地址
+        port: 8719  # Sentinel 客户端端口
       datasource:
         flow:
           nacos:
-            server-addr: localhost:8848
+            server-addr: localhost:8848  # 流控规则持久化地址
 ```
 
 ---
@@ -507,3 +533,15 @@ config.setAllowCredentials(true);
 - [架构概述](../architecture/overview.md)
 - [安全架构](../architecture/security.md)
 - [配置指南](../configuration/properties.md)
+
+---
+
+## 模块引用关系
+
+| 依赖类型 | 模块 | 说明 |
+|---------|------|------|
+| 调用依赖 | fastsun-oauth | 认证鉴权服务用于 Token 验证和权限校验 |
+| 调用依赖 | fastsun-ucenter | 用户中心，网关路由转发用户相关请求 |
+| 调用依赖 | fastsun-service | 服务管理，网关路由转发服务相关请求 |
+| 注册依赖 | Nacos | 服务注册与发现、配置中心 |
+| 存储依赖 | Redis | 用于限流计数和缓存

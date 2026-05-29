@@ -19,6 +19,26 @@ fastsun-service 是 Fastsun 平台的服务管理模块，提供微服务注册�
 
 ---
 
+## 应用场景
+
+### 1. 微服务间远程调用
+
+在微服务架构中，服务之间需要相互调用获取数据或执行操作，通过 Feign 声明式客户端实现服务间的 RESTful 调用，简化开发流程。
+
+### 2. 服务注册与动态发现
+
+服务实例启动后自动注册到 Nacos 注册中心，调用方通过服务名称动态发现可用实例，实现服务的自动伸缩和故障转移。
+
+### 3. 负载均衡与流量分发
+
+当一个服务有多个实例时，通过 Ribbon 负载均衡策略将请求分发到不同实例，避免单点过载，提升系统整体吞吐量。
+
+### 4. 熔断降级与容错保护
+
+当被调用服务出现故障或超时时，触发熔断降级机制返回友好的降级响应，防止级联故障，保障系统核心功能的可用性。
+
+---
+
 ## 核心功能
 
 ### 1. 服务注册
@@ -358,28 +378,30 @@ user-service:
 
 ## 相关配置
 
+服务管理的核心配置，包括服务发现、Feign 客户端和熔断降级策略。
+
 ```yaml
 spring:
   cloud:
     # 服务发现
     discovery:
-      enabled: true
+      enabled: true  # 是否启用服务发现 <span class="config-required">(必需)</span>
     # Nacos 配置
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
-        namespace: dev
-        group: DEFAULT_GROUP
+        server-addr: 127.0.0.1:8848  # Nacos 注册中心地址 <span class="config-required">(必需)</span>
+        namespace: dev  # Nacos 命名空间，用于环境隔离
+        group: DEFAULT_GROUP  # Nacos 分组
 
 # Feign 配置
 feign:
   hystrix:
-    enabled: true
+    enabled: true  # 是否启用 Hystrix 熔断支持
   compression:
     request:
-      enabled: true
+      enabled: true  # 是否启用请求压缩
     response:
-      enabled: true
+      enabled: true  # 是否启用响应压缩
 
 # Hystrix 配置
 hystrix:
@@ -388,8 +410,7 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 3000
-```
+            timeoutInMilliseconds: 3000  # Hystrix 线程超时时间（毫秒）
 
 ---
 
@@ -403,3 +424,15 @@ fastsun-service 模块提供了完善的微服务治理能力：
 - ✅ 健康检查
 
 适用于微服务架构下的服务间调用场景。
+
+---
+
+## 模块引用关系
+
+| 依赖类型 | 模块 | 说明 |
+|---------|------|------|
+| 调用依赖 | fastsun-ucenter | 用户中心，服务管理 SDK 用于用户服务的 Feign 调用 |
+| 调用依赖 | fastsun-oauth | 认证授权，Feign 调用中传递 Token 实现鉴权 |
+| 调用依赖 | fastsun-gateway | API 网关，网关通过服务发现路由到后端服务 |
+| 注册依赖 | Nacos | 服务注册与发现中心 |
+| 存储依赖 | MySQL | 存储服务注册信息、调用日志等数据

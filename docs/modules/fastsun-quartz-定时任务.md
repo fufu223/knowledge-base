@@ -21,6 +21,22 @@ fastsun-quartz 是 Fastsun 平台的定时任务模块，基于 Quartz 实现分
 
 ---
 
+## 应用场景
+
+### 1. 数据定时同步
+在多数据源系统中，需要定时从源数据库抽取数据并同步到目标数据库。通过 fastsun-quartz 配置 Cron 表达式，实现每日凌晨自动执行数据同步任务，并记录每次同步的执行状态和日志。
+
+### 2. 定时报表生成
+企业运营需要每日、每周或每月生成统计报表并推送给相关人员。利用定时任务模块调用报表服务生成 PDF/Excel 报表，通过邮件或消息通知自动分发。
+
+### 3. 过期数据清理
+业务数据存在生命周期管理需求，例如超过 90 天的临时数据、30 天前的操作日志需要定期清理。通过定时任务结合自定义参数，灵活配置清理策略和保留时长。
+
+### 4. HTTP 接口定时回调
+在系统间集成场景中，需要定时调用第三方系统的 API 接口，如状态同步、心跳检测、定时推送等。通过 HttpJob 直接配置 URL 和方法，无需编写额外的 Job 实现类。
+
+---
+
 ## 主要类
 
 ### 服务层
@@ -299,20 +315,20 @@ spring:
 ```yaml
 spring:
   quartz:
-    # 存储类型：memory, jdbc
+    # 任务存储类型：memory（内存）或 jdbc（数据库），生产环境建议使用 jdbc <span class="config-required">(必需)</span>
     job-store-type: jdbc
     
-    # 是否覆盖已存在的任务
+    # 是否覆盖已存在的同名任务，true 表示同名任务自动覆盖
     overwrite-existing-jobs: true
     
-    # 相关属性
+    # Quartz 调度器属性
     properties:
       org:
         quartz:
           scheduler:
-            instanceName: myScheduler
+            instanceName: myScheduler   # 调度器实例名称，集群模式下各实例需保持一致
           threadPool:
-            threadCount: 10
+            threadCount: 10             # 任务线程池大小，影响并行执行的任务数量
 ```
 
 ### 数据源配置（JDBC Store）
@@ -321,9 +337,9 @@ spring:
 spring:
   datasource:
     quartz:
-      url: jdbc:mysql://localhost:3306/fastsun_quartz
-      username: root
-      password: password
+      url: jdbc:mysql://localhost:3306/fastsun_quartz  # Quartz 专用数据库连接地址 <span class="config-required">(必需)</span>
+      username: root                                    # 数据库用户名 <span class="config-required">(必需)</span>
+      password: password                                # 数据库密码 <span class="config-required">(必需)</span>
 ```
 
 ---
@@ -514,3 +530,12 @@ A:
 
 - [架构概述](../architecture/overview.md)
 - [配置指南](../configuration/properties.md)
+
+## 模块引用关系
+
+| 方向 | 模块名称 | 说明 |
+|------|---------|------|
+| 依赖 | fastsun-base | 依赖基础模块的 Service 抽象和异常处理 |
+| 依赖 | fastsun-common | 依赖通用模块的公共组件 |
+| 依赖 | Spring Data JPA | 使用 JPA 存储任务和日志数据 |
+| 被依赖 | 业务模块 | 各业务模块通过 SDK 接入定时任务能力 |
