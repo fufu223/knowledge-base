@@ -7,6 +7,7 @@
   * [架构概览](docs/architecture/架构概览.md)
   * [多租户架构](docs/architecture/多租户架构.md)
   * [安全架构](docs/architecture/安全架构.md)
+  * [业务流程图](docs/architecture/业务流程图.md)
 
 * **核心模块**
   * [fastsun-base【基础模块】](docs/modules/fastsun-base-基础模块.md)
@@ -62,7 +63,7 @@
 * **配置参考**
   * [配置项大全](docs/configuration/配置项大全.md)
 
-* **业务常见问题**
+* **常用模块详细说明**
   * [数据权限实现机制](docs/guides/数据权限实现机制.md)
   * [消息通知模块使用教程](docs/guides/消息通知模块使用教程.md)
   * [消息模板配置问题排查指南](docs/guides/消息模板配置问题排查指南.md)
@@ -72,3 +73,7 @@
   * [低代码平台静态资源配置说明](docs/guides/低代码平台静态资源配置说明.md)
   * [H5端静态资源路径问题说明](docs/guides/H5端静态资源路径问题说明.md)
   * [工作流集成说明](docs/guides/activiti.md)
+  * [数据字典使用指南](docs/guides/数据字典使用指南.md)
+
+* **案例：业务落地指南**
+  * [待补充...](docs/cases/README.md)

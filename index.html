@@ -20,6 +20,9 @@
 <body>
   <div id="app">加载中...</div>
   
+  <!-- 右侧目录边栏 -->
+  <div class="right-sidebar" id="right-sidebar"></div>
+  
   <!-- 分支版本标识 -->
   <div class="branch-badge" id="branch-badge">
     <span class="branch-label">分支:</span>
@@ -63,7 +66,7 @@
       loadSidebar: true,
       loadNavbar: false,
       homepage: 'README.md',  // 首页文件
-      subMaxLevel: 3,  // 侧边栏最大层级
+      subMaxLevel: 0,  // 页面标题不自动加入左侧边栏（交给右侧边栏）
       auto2top: false,  // 由 doneEach 钩子手动控制回到顶部
       
       // 锚点定位偏移量（重要！）
@@ -90,12 +93,16 @@
       markdown: {
         renderer: {
           code: function(code, lang) {
+            if (lang === 'mermaid') {
+              return '<div class="mermaid">' + code + '</div>';
+            }
             if (lang === 'java') {
-              return '<pre class="hljs"><code>' + 
-                Prism.highlight(code, Prism.languages.java, 'java') + 
+              return '<pre v-pre class="hljs"><code>' +
+                Prism.highlight(code, Prism.languages.java, 'java') +
                 '</code></pre>';
             }
-            return '<pre class="hljs"><code>' + code + '</code></pre>';
+            var langClass = lang ? ' class="language-' + lang + '"' : '';
+            return '<pre v-pre class="hljs"><code' + langClass + '>' + code + '</code></pre>';
           }
         }
       },
@@ -194,11 +201,375 @@
   <script src="//cdn.jsdelivr.net/npm/docsify-count@latest/dist/countable.min.js"></script>
   
   <!-- 图片缩放 -->
-  <script src="//cdn.jsdelivr.net/npm/docsify-zoom-image@1/dist/docsify-zoom-image.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script>
+  <script>
+    window.$docsify.plugins = (window.$docsify.plugins || []).concat(function(hook) {
+      hook.doneEach(function() {
+        setTimeout(function() {
+          mediumZoom('.markdown-section img:not(.emoji):not([data-no-zoom])', {
+            background: 'rgba(0, 0, 0, 0.5)',
+            margin: 40
+          });
+        }, 500);
+      });
+    });
+  </script>
   
   <!-- 外部链接图标 -->
   <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/plugins/external-script.min.js"></script>
   
+  <!-- Mermaid.js 图表渲染 -->
+  <script src="//cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  
+  <!-- Mermaid 初始化 -->
+  <script>
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'default',
+      securityLevel: 'loose'
+    });
+  </script>
+
+  <!-- 右侧目录边栏 + Mermaid 渲染 + 全屏查看器 插件 -->
+  <script>
+    (function() {
+      // ==================== Mermaid 全屏查看器 ====================
+      var viewer = null;        // .mermaid-viewer DOM
+      var imgEl = null;         // 查看器中的 <img>（自包含 SVG）
+      var zoomLabel = null;     // 缩放比例标签
+
+      // 视图状态
+      var scale = 1;
+      var panX = 0, panY = 0;
+      // 原始尺寸
+      var imgW = 0, imgH = 0;
+
+      // 拖拽状态
+      var dragging = false;
+      var dragStartX = 0, dragStartY = 0;
+      var panStartX = 0, panStartY = 0;
+
+      // 最小/最大缩放
+      var MIN_SCALE = 0.05;
+      var MAX_SCALE = 10;
+
+      function initViewer() {
+        document.addEventListener('click', function(e) {
+          var mermaidEl = e.target.closest('.markdown-section .mermaid');
+          if (mermaidEl && !e.target.closest('.mermaid-viewer')) {
+            e.preventDefault();
+            e.stopPropagation();
+            openViewer(mermaidEl);
+          }
+        });
+
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && viewer && viewer.classList.contains('active')) {
+            e.preventDefault();
+            closeViewer();
+          }
+        });
+
+        document.addEventListener('wheel', function(e) {
+          if (!viewer || !viewer.classList.contains('active')) return;
+          e.preventDefault();
+          var delta = e.deltaY > 0 ? 0.9 : 1.1;
+          zoomAtPoint(e.clientX, e.clientY, delta);
+        }, { passive: false });
+      }
+
+      function openViewer(sourceEl) {
+        closeViewer();
+
+        var srcSvg = sourceEl.querySelector('svg');
+        if (!srcSvg) return;
+
+        // 从原始已渲染 SVG 获取可见尺寸
+        var rect = srcSvg.getBoundingClientRect();
+        imgW = rect.width || 800;
+        imgH = rect.height || 600;
+
+        // 创建全屏容器
+        viewer = document.createElement('div');
+        viewer.className = 'mermaid-viewer';
+
+        // 工具栏
+        var toolbar = document.createElement('div');
+        toolbar.className = 'mermaid-viewer-toolbar';
+        toolbar.innerHTML =
+          '<button class="v-zoomout" title="缩小">−</button>' +
+          '<span class="mermaid-viewer-zoom-label">100%</span>' +
+          '<button class="v-zoomin" title="放大">+</button>' +
+          '<button class="v-fit" title="适应屏幕">⊡</button>' +
+          '<button class="v-close" title="关闭 (Esc)">✕</button>';
+        viewer.appendChild(toolbar);
+
+        // 底部提示
+        var hint = document.createElement('div');
+        hint.className = 'mermaid-viewer-hint';
+        hint.textContent = '滚轮缩放 · 拖拽平移 · 双击适应屏幕 · Esc 关闭';
+        viewer.appendChild(hint);
+
+        // 克隆整个 .mermaid 容器，不改动任何属性，颜色与页面完全一致
+        var clone = sourceEl.cloneNode(true);
+        clone.id = '';
+        clone.style.cssText = 'display:block;transform-origin:0 0;';
+        viewer.appendChild(clone);
+        document.body.appendChild(viewer);
+
+        zoomLabel = viewer.querySelector('.mermaid-viewer-zoom-label');
+        fitToScreen();
+        requestAnimationFrame(function() {
+          viewer.classList.add('active');
+        });
+        setTimeout(function() {
+          if (hint) hint.classList.add('hidden');
+        }, 3000);
+
+        // --- 事件绑定 ---
+        toolbar.querySelector('.v-zoomin').addEventListener('click', function(e) {
+          e.stopPropagation();
+          zoomAtCenter(1.3);
+        });
+        toolbar.querySelector('.v-zoomout').addEventListener('click', function(e) {
+          e.stopPropagation();
+          zoomAtCenter(0.7);
+        });
+        toolbar.querySelector('.v-fit').addEventListener('click', function(e) {
+          e.stopPropagation();
+          fitToScreen();
+        });
+        toolbar.querySelector('.v-close').addEventListener('click', function(e) {
+          e.stopPropagation();
+          closeViewer();
+        });
+
+        viewer.addEventListener('mousedown', function(e) {
+          if (e.target.closest('.mermaid-viewer-toolbar')) return;
+          dragging = true;
+          dragStartX = e.clientX;
+          dragStartY = e.clientY;
+          panStartX = panX;
+          panStartY = panY;
+          viewer.classList.add('dragging');
+        });
+
+        document.addEventListener('mousemove', function(e) {
+          if (!dragging) return;
+          panX = panStartX + (e.clientX - dragStartX);
+          panY = panStartY + (e.clientY - dragStartY);
+          applyTransform();
+        });
+
+        document.addEventListener('mouseup', function() {
+          if (dragging) {
+            dragging = false;
+            if (viewer) viewer.classList.remove('dragging');
+          }
+        });
+
+        viewer.addEventListener('touchstart', function(e) {
+          if (e.target.closest('.mermaid-viewer-toolbar')) return;
+          if (e.touches.length === 1) {
+            dragging = true;
+            dragStartX = e.touches[0].clientX;
+            dragStartY = e.touches[0].clientY;
+            panStartX = panX;
+            panStartY = panY;
+          }
+        }, { passive: true });
+
+        viewer.addEventListener('touchmove', function(e) {
+          if (!dragging || e.touches.length !== 1) return;
+          e.preventDefault();
+          panX = panStartX + (e.touches[0].clientX - dragStartX);
+          panY = panStartY + (e.touches[0].clientY - dragStartY);
+          applyTransform();
+        }, { passive: false });
+
+        viewer.addEventListener('touchend', function() {
+          dragging = false;
+        });
+
+        viewer.addEventListener('dblclick', function(e) {
+          if (e.target.closest('.mermaid-viewer-toolbar')) return;
+          e.preventDefault();
+          fitToScreen();
+        });
+      }
+
+      function applyTransform() {
+        var el = viewer && viewer.querySelector('.mermaid');
+        if (!el) return;
+        el.style.transform = 'translate(' + panX + 'px,' + panY + 'px) scale(' + scale + ')';
+        if (zoomLabel) {
+          zoomLabel.textContent = Math.round(scale * 100) + '%';
+        }
+      }
+
+      function fitToScreen() {
+        if (!viewer || imgW < 1) return;
+        var vw = window.innerWidth;
+        var vh = window.innerHeight;
+        var fitScale = Math.min(vw / imgW, vh / imgH) * 0.85;
+        scale = fitScale;
+        panX = (vw - imgW * scale) / 2;
+        panY = (vh - imgH * scale) / 2;
+        applyTransform();
+      }
+
+      function zoomAtCenter(factor) {
+        if (!viewer) return;
+        zoomAtPoint(window.innerWidth / 2, window.innerHeight / 2, factor);
+      }
+
+      function zoomAtPoint(cx, cy, factor) {
+        var newScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, scale * factor));
+        var sx = (cx - panX) / scale;
+        var sy = (cy - panY) / scale;
+        panX = cx - sx * newScale;
+        panY = cy - sy * newScale;
+        scale = newScale;
+        applyTransform();
+      }
+
+      function closeViewer() {
+        if (viewer) {
+          viewer.classList.remove('active');
+          var v = viewer;
+          setTimeout(function() {
+            if (v && v.parentNode) v.parentNode.removeChild(v);
+          }, 300);
+          viewer = null;
+          imgEl = null;
+          zoomLabel = null;
+          scale = 1;
+          panX = 0;
+          panY = 0;
+          imgW = 0;
+          imgH = 0;
+          dragging = false;
+        }
+      }
+
+      // 初始化
+      initViewer();
+
+      // ==================== 右侧目录边栏 ====================
+      function buildRightSidebar() {
+        var sidebar = document.getElementById('right-sidebar');
+        if (!sidebar) return;
+
+        var content = document.querySelector('.markdown-section');
+        if (!content) { sidebar.innerHTML = ''; return; }
+
+        var headings = content.querySelectorAll('h2, h3');
+        if (headings.length === 0) { sidebar.innerHTML = ''; return; }
+
+        var html = '<div class="right-sidebar-title">本页目录</div><nav class="right-sidebar-nav"><ul>';
+        headings.forEach(function(h) {
+          var id = h.id || h.textContent.trim().replace(/\s+/g, '-').toLowerCase();
+          var text = h.textContent.trim();
+          var tag = h.tagName.toLowerCase();
+          if (tag === 'h3') {
+            html += '<li class="h3-item"><a href="#' + id + '" class="h3-link">' + text + '</a></li>';
+          } else {
+            html += '<li><a href="#' + id + '">' + text + '</a></li>';
+          }
+        });
+        html += '</ul></nav>';
+        sidebar.innerHTML = html;
+
+        // 绑定点击事件：平滑滚动 + 仅更新 hash fragment（不改变路由路径）
+        sidebar.querySelectorAll('a').forEach(function(a) {
+          a.addEventListener('click', function(e) {
+            e.preventDefault();
+            var targetId = this.getAttribute('href').substring(1);
+            var target = document.getElementById(targetId);
+            if (!target) {
+              target = document.querySelector('[id="' + targetId + '"]');
+            }
+            if (!target) {
+              target = document.getElementById(decodeURIComponent(targetId));
+            }
+            if (target) {
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            // 高亮当前点击项
+            sidebar.querySelectorAll('a').forEach(function(a2) { a2.classList.remove('active-section'); });
+            this.classList.add('active-section');
+          });
+        });
+      }
+
+      // 滚动监听：高亮当前章节
+      function updateActiveSection() {
+        var sidebar = document.getElementById('right-sidebar');
+        if (!sidebar) return;
+        var links = sidebar.querySelectorAll('a');
+        if (links.length === 0) return;
+
+        var content = document.querySelector('.markdown-section');
+        if (!content) return;
+
+        var headings = content.querySelectorAll('h2, h3');
+        if (headings.length === 0) return;
+
+        var scrollTop = content.scrollTop || 0;
+
+        // 默认选中第一个（未滚动或未渲染完成时始终为首项）
+        var activeIndex = 0;
+
+        // 只有在已滚动且标题已渲染的情况下才计算
+        if (scrollTop > 20 && headings[0].offsetTop > 0) {
+          headings.forEach(function(h, i) {
+            if (h.offsetTop <= scrollTop + 100) {
+              activeIndex = i;
+            }
+          });
+        }
+
+        links.forEach(function(link, i) {
+          link.classList.toggle('active-section', i === activeIndex);
+        });
+      }
+
+      // Docsify 插件
+      window.$docsify = window.$docsify || {};
+      var existingPlugins = window.$docsify.plugins || [];
+      window.$docsify.plugins = existingPlugins.concat(function(hook) {
+        hook.doneEach(function() {
+          // 构建右侧边栏
+          buildRightSidebar();
+
+          // 重置内容区滚动位置（Docsify 复用 DOM，innerHTML 替换不会重置 scrollTop）
+          var content = document.querySelector('.markdown-section');
+          if (content) content.scrollTop = 0;
+
+          // 立即高亮首个目录项
+          updateActiveSection();
+
+          // 渲染 Mermaid 图表
+          setTimeout(function() {
+            if (typeof mermaid !== 'undefined') {
+              mermaid.run({ nodes: document.querySelectorAll('.mermaid') });
+            }
+          }, 300);
+        });
+      });
+
+      // 内容区滚动监听（用于高亮当前章节）
+      document.addEventListener('DOMContentLoaded', function() {
+        var content = document.querySelector('.markdown-section');
+        if (content) {
+          content.addEventListener('scroll', function() {
+            requestAnimationFrame(updateActiveSection);
+          });
+        }
+      });
+    })();
+  </script>
+
   <!-- 锚点定位修复脚本 -->
   <script>
     // 等待 Docsify 初始化完成后处理锚点定位
@@ -274,8 +645,6 @@
         
         if (targetElement) {
           scrollToElement(targetElement);
-          // 更新 URL
-          history.pushState(null, null, href);
         } else {
           // 如果元素还没渲染，延迟重试
           setTimeout(function() {

@@ -1086,6 +1086,187 @@ body.dark-mode .sidebar-nav ul ul li a.active::before {
   font-weight: 500;
 }
 
+/* ==================== Mermaid 图表全屏查看器 ==================== */
+
+/* 页面中的 Mermaid 图表 - 添加可点击提示 */
+.markdown-section .mermaid {
+  position: relative;
+  cursor: zoom-in;
+  padding: 12px;
+  margin: 16px 0;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(139, 92, 246, 0.08);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  overflow: visible;
+}
+
+body.dark-mode .markdown-section .mermaid {
+  background: rgba(30, 30, 46, 0.5);
+  border-color: rgba(139, 92, 246, 0.15);
+}
+
+.markdown-section .mermaid:hover {
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.12);
+  border-color: rgba(139, 92, 246, 0.2);
+}
+
+/* 图表右下角放大提示 */
+.markdown-section .mermaid::after {
+  content: '🔍 点击全屏查看';
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2px 8px;
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+}
+
+body.dark-mode .markdown-section .mermaid::after {
+  background: rgba(30, 30, 46, 0.9);
+  color: #8890A0;
+}
+
+.markdown-section .mermaid:hover::after {
+  opacity: 1;
+}
+
+/* --- 全屏查看器 --- */
+
+/* 遮罩：全屏覆盖，白色背景保留 SVG 原始颜色 */
+.mermaid-viewer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.96);
+  z-index: 99999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: hidden;
+}
+
+body.dark-mode .mermaid-viewer {
+  background: rgba(18, 18, 30, 0.97);
+}
+
+.mermaid-viewer.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mermaid-viewer.dragging {
+  cursor: grabbing;
+}
+
+/* 克隆的 .mermaid 容器 —— 零改动原样渲染 */
+.mermaid-viewer .mermaid {
+  display: block;
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+/* 顶部工具栏 */
+.mermaid-viewer-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  z-index: 100001;
+  pointer-events: none;
+}
+
+.mermaid-viewer-toolbar > * {
+  pointer-events: auto;
+}
+
+.mermaid-viewer-toolbar button {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.06);
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.mermaid-viewer-toolbar button:hover {
+  background: var(--theme-color);
+  color: #fff;
+  transform: scale(1.08);
+}
+
+body.dark-mode .mermaid-viewer-toolbar button {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+body.dark-mode .mermaid-viewer-toolbar button:hover {
+  background: rgba(139, 92, 246, 0.4);
+  color: #fff;
+}
+
+/* 缩放比例标签 */
+.mermaid-viewer-zoom-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.04);
+  padding: 4px 14px;
+  border-radius: 8px;
+  min-width: 60px;
+  text-align: center;
+  pointer-events: none;
+}
+
+body.dark-mode .mermaid-viewer-zoom-label {
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* 底部操作提示 */
+.mermaid-viewer-hint {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  white-space: nowrap;
+  transition: opacity 0.5s ease;
+}
+
+body.dark-mode .mermaid-viewer-hint {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.mermaid-viewer-hint.hidden {
+  opacity: 0;
+}
+
 /* ==================== 响应式设计 ==================== */
 /* 笔记本适配 - 解决内容与侧边栏重叠问题 */
 @media (max-width: 1599px) and (min-width: 769px) {
@@ -1201,4 +1382,144 @@ body.dark-mode #main h4,
 body.dark-mode #main h5,
 body.dark-mode #main h6 {
   color: #FFFFFF !important;
+}
+
+/* ==================== 右侧目录边栏 ==================== */
+.right-sidebar {
+  position: fixed;
+  right: 16px;
+  top: 230px;
+  bottom: 16px;
+  width: 220px;
+  z-index: 998;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(30px) saturate(200%);
+  -webkit-backdrop-filter: blur(30px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow:
+    0 8px 32px rgba(139, 92, 246, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.04);
+  border-radius: 20px;
+  padding: 16px 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.right-sidebar:hover {
+  box-shadow:
+    0 12px 48px rgba(139, 92, 246, 0.18),
+    0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.right-sidebar::-webkit-scrollbar {
+  width: 3px;
+}
+
+.right-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.right-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.15);
+  border-radius: 10px;
+}
+
+.right-sidebar-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  padding: 4px 18px 10px;
+  margin: 0 0 8px;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+}
+
+.right-sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.right-sidebar-nav li {
+  margin: 0;
+}
+
+.right-sidebar-nav a {
+  display: block;
+  padding: 6px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  line-height: 1.5;
+  border-left: 2px solid transparent;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  word-break: break-word;
+}
+
+.right-sidebar-nav a:hover {
+  color: var(--theme-color);
+  border-left-color: var(--theme-color-lighter);
+  background: linear-gradient(90deg, rgba(139, 92, 246, 0.06) 0%, transparent 100%);
+}
+
+.right-sidebar-nav a.active-section {
+  color: var(--theme-color);
+  font-weight: 600;
+  border-left-color: var(--theme-color);
+  background: linear-gradient(90deg, rgba(139, 92, 246, 0.1) 0%, transparent 100%);
+}
+
+.right-sidebar-nav .h3-item {
+  padding-left: 16px;
+}
+
+.right-sidebar-nav .h3-link {
+  font-size: 12.5px;
+  font-weight: 400;
+}
+
+/* 右侧边栏响应式隐藏 */
+@media (max-width: 1399px) {
+  .right-sidebar {
+    display: none;
+  }
+}
+
+/* 黑暗模式 */
+body.dark-mode .right-sidebar {
+  background: rgba(30, 30, 46, 0.7);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .right-sidebar:hover {
+  box-shadow:
+    0 12px 48px rgba(139, 92, 246, 0.25),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .right-sidebar-title {
+  color: #8890A0;
+  border-bottom-color: rgba(139, 92, 246, 0.15);
+}
+
+body.dark-mode .right-sidebar-nav a {
+  color: #B0B0C0;
+}
+
+body.dark-mode .right-sidebar-nav a:hover {
+  color: #C4B5FD;
+  border-left-color: rgba(139, 92, 246, 0.4);
+  background: linear-gradient(90deg, rgba(139, 92, 246, 0.12) 0%, transparent 100%);
+}
+
+body.dark-mode .right-sidebar-nav a.active-section {
+  color: #C4B5FD;
+  border-left-color: #A78BFA;
+  background: linear-gradient(90deg, rgba(139, 92, 246, 0.22) 0%, transparent 100%);
 }
