@@ -54,7 +54,7 @@
       // 基础路径配置（重要！）时设置为 '/'
       // GitHub Pages 部署时设置为 '/仓库名/'
       // 例如：仓库名为 knowledge-base，则设置为 '/knowledge-base/'
-      basePath: '/knowledge-base/',  // 本地预览使用 '/'，部署时修改为仓库名
+      basePath: '/',  // 本地预览使用 '/'，部署时修改为仓库名
       
       // 路由别名配置（解决GitHub Pages下划线文件问题）
       alias: {
@@ -225,8 +225,41 @@
   <script>
     mermaid.initialize({
       startOnLoad: false,
-      theme: 'default',
-      securityLevel: 'loose'
+      theme: 'base',
+      securityLevel: 'loose',
+      themeVariables: {
+        primaryColor: '#FFFFFF',
+        primaryBorderColor: '#E5E5EA',
+        primaryTextColor: '#1D1D1F',
+        secondaryColor: '#F5F5F7',
+        tertiaryColor: '#FAFAFA',
+        lineColor: '#C7C7CC',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif',
+        fontSize: '13px',
+        nodeBorder: '#E5E5EA',
+        clusterBkg: 'rgba(245, 245, 247, 0.9)',
+        clusterBorder: '#E5E5EA',
+        titleColor: '#1D1D1F',
+        edgeLabelBackground: '#FFFFFF'
+      },
+      flowchart: {
+        useMaxWidth: false,
+        htmlLabels: true,
+        curve: 'basis',
+        nodeSpacing: 50,
+        rankSpacing: 50
+      },
+      sequence: {
+        useMaxWidth: false,
+        wrap: true,
+        mirrorActors: false,
+        boxMargin: 10
+      },
+      class: { useMaxWidth: false },
+      state: { useMaxWidth: false },
+      er: { useMaxWidth: false },
+      gantt: { useMaxWidth: false },
+      journey: { useMaxWidth: false }
     });
   </script>
 

@@ -13,9 +13,9 @@
   align-items: center;
   gap: 6px;
   padding: 4px 12px;
-  background: rgba(139, 92, 246, 0.15);
+  background: rgba(0, 122, 255, 0.1);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  border: 1px solid rgba(0, 122, 255, 0.15);
   border-radius: var(--radius-full);
   font-size: 12px;
 }
@@ -28,7 +28,7 @@
 .branch-select {
   background: transparent;
   border: none;
-  color: var(--theme-color-dark);
+  color: var(--theme-color);
   font-weight: 600;
   font-size: 12px;
   cursor: pointer;
@@ -38,7 +38,7 @@
 }
 
 .branch-select:hover {
-  background: rgba(139, 92, 246, 0.1);
+  background: rgba(0, 122, 255, 0.08);
 }
 
 /* ==================== 配置项必需标记 ==================== */
@@ -83,29 +83,29 @@
 
 /* ==================== 全局变量 ==================== */
 :root {
-  /* 主色调 - 紫色系 */
-  --theme-color: #8B5CF6;
-  --theme-color-light: #A78BFA;
-  --theme-color-lighter: #DDD6FE;
-  --theme-color-dark: #7C3AED;
+  /* 主色调 - iOS Blue */
+  --theme-color: #007AFF;
+  --theme-color-light: #3399FF;
+  --theme-color-lighter: #B3D9FF;
+  --theme-color-dark: #0055CC;
   
   /* 背景色 */
-  --bg-body: linear-gradient(135deg, #E0E7FF 0%, #C7D2FE 30%, #DDD6FE 60%, #E0E7FF 100%);
-  --bg-sidebar: rgba(255, 255, 255, 0.6);
-  --bg-content: rgba(255, 255, 255, 0.85);
+  --bg-body: #F5F5F7;
+  --bg-sidebar: rgba(255, 255, 255, 0.85);
+  --bg-content: rgba(255, 255, 255, 0.95);
   --bg-code: #1E1E2E;
   
   /* 文字颜色 */
-  --text-primary: #2D3748;
-  --text-secondary: #4A5568;
-  --text-tertiary: #718096;
+  --text-primary: #1D1D1F;
+  --text-secondary: #48484A;
+  --text-tertiary: #8E8E93;
   
   /* 边框和阴影 */
-  --border-color: rgba(255, 255, 255, 0.6);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.08);
-  --shadow-xl: 0 12px 48px rgba(0, 0, 0, 0.1);
+  --border-color: rgba(60, 60, 67, 0.08);
+  --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 12px 48px rgba(0, 0, 0, 0.04);
   
   /* 圆角 */
   --radius-sm: 8px;
@@ -129,8 +129,7 @@ html {
 
 body {
   background: var(--bg-body);
-  background-attachment: fixed;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", 'PingFang SC', 'Microsoft YaHei', sans-serif;
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -139,31 +138,13 @@ body {
   position: relative;
 }
 
-/* 背景装饰 - 光点 */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.9) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.7) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.5) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ==================== 侧边栏 - 现代化设计 ==================== */
+/* ==================== 侧边栏 - iOS 极简毛玻璃 ==================== */
 .sidebar {
   background: rgba(255, 255, 255, 0.85) !important;
-  backdrop-filter: blur(30px) saturate(200%) !important;
-  -webkit-backdrop-filter: blur(30px) saturate(200%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 
-    0 8px 32px rgba(139, 92, 246, 0.12),
-    0 2px 8px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: none;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
   padding: 0;
   margin: 16px;
   border-radius: 20px;
@@ -180,9 +161,7 @@ body::before {
 }
 
 .sidebar:hover {
-  box-shadow: 
-    0 12px 48px rgba(139, 92, 246, 0.18),
-    0 4px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
 }
 
 .sidebar::-webkit-scrollbar {
@@ -194,19 +173,19 @@ body::before {
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background: rgba(139, 92, 246, 0.2);
+  background: rgba(0, 122, 255, 0.15);
   border-radius: 10px;
 }
 
 .sidebar::-webkit-scrollbar-thumb:hover {
-  background: rgba(139, 92, 246, 0.4);
+  background: rgba(0, 122, 255, 0.28);
 }
 
 /* 侧边栏头部 */
 .sidebar-header {
   padding: 20px 16px 16px 16px;
-  border-bottom: 1px solid rgba(139, 92, 246, 0.1);
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(167, 139, 250, 0.02) 100%);
+  border-bottom: 1px solid rgba(0, 122, 255, 0.08);
+  background: linear-gradient(135deg, rgba(0, 122, 255, 0.03) 0%, rgba(51, 153, 255, 0.01) 100%);
 }
 
 .app-name {
@@ -218,7 +197,7 @@ body::before {
 }
 
 .app-name-link {
-  background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 50%, #C4B5FD 100%);
+  background: linear-gradient(135deg, #007AFF 0%, #3399FF 50%, #80BFFF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -248,13 +227,13 @@ body::before {
 .search input {
   width: 100%;
   padding: 10px 14px;
-  border: 1.5px solid rgba(139, 92, 246, 0.15);
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.7);
   font-size: 13px;
   color: var(--text-primary);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
 .search input::placeholder {
@@ -267,8 +246,8 @@ body::before {
   border-color: var(--theme-color);
   background: rgba(255, 255, 255, 0.95);
   box-shadow: 
-    0 0 0 4px rgba(139, 92, 246, 0.1),
-    0 4px 12px rgba(139, 92, 246, 0.15);
+    0 0 0 4px rgba(0, 122, 255, 0.08),
+    0 4px 12px rgba(0, 122, 255, 0.08);
   transform: translateY(-1px);
 }
 
@@ -299,7 +278,7 @@ body::before {
   letter-spacing: 1.8px;
   text-transform: uppercase;
   line-height: 1.4;
-  border-top: 1px solid rgba(139, 92, 246, 0.08);
+  border-top: 1px solid rgba(0, 122, 255, 0.08);
   margin-top: 14px;
 }
 
@@ -317,18 +296,18 @@ body::before {
 }
 
 /* 分类色系 - 标题装饰条 */
-.sidebar-nav > ul > li:nth-child(3) > strong::before { background: #8B5CF6; }
-.sidebar-nav > ul > li:nth-child(4) > strong::before { background: #8B5CF6; }
-.sidebar-nav > ul > li:nth-child(5) > strong::before { background: #3B82F6; }
-.sidebar-nav > ul > li:nth-child(6) > strong::before { background: #10B981; }
-.sidebar-nav > ul > li:nth-child(7) > strong::before { background: #F59E0B; }
-.sidebar-nav > ul > li:nth-child(8) > strong::before { background: #EC4899; }
-.sidebar-nav > ul > li:nth-child(9) > strong::before { background: #06B6D4; }
-.sidebar-nav > ul > li:nth-child(10) > strong::before { background: #6B7280; }
-.sidebar-nav > ul > li:nth-child(11) > strong::before { background: #8B5CF6; }
-.sidebar-nav > ul > li:nth-child(12) > strong::before { background: #8B5CF6; }
-.sidebar-nav > ul > li:nth-child(13) > strong::before { background: #8B5CF6; }
-.sidebar-nav > ul > li:nth-child(14) > strong::before { background: #8B5CF6; }
+.sidebar-nav > ul > li:nth-child(3) > strong::before { background: #007AFF; }
+.sidebar-nav > ul > li:nth-child(4) > strong::before { background: #007AFF; }
+.sidebar-nav > ul > li:nth-child(5) > strong::before { background: #007AFF; }
+.sidebar-nav > ul > li:nth-child(6) > strong::before { background: #007AFF; }
+.sidebar-nav > ul > li:nth-child(7) > strong::before { background: #007AFF; }
+.sidebar-nav > ul > li:nth-child(8) > strong::before { background: #007AFF; }
+.sidebar-nav > ul > li:nth-child(9) > strong::before { background: #007AFF; }
+.sidebar-nav > ul > li:nth-child(10) > strong::before { background: #007AFF; }
+.sidebar-nav > ul > li:nth-child(11) > strong::before { background: #007AFF; }
+.sidebar-nav > ul > li:nth-child(12) > strong::before { background: #007AFF; }
+.sidebar-nav > ul > li:nth-child(13) > strong::before { background: #007AFF; }
+.sidebar-nav > ul > li:nth-child(14) > strong::before { background: #007AFF; }
 
 /* 排除第一个标题（快速开始）的分隔线 */
 .sidebar-nav > ul > li:nth-child(2) > strong {
@@ -361,26 +340,25 @@ body::before {
   top: 0;
   width: 3px;
   height: 100%;
-  background: linear-gradient(180deg, #8B5CF6 0%, #A78BFA 100%);
+  background: linear-gradient(180deg, #007AFF 0%, #3399FF 100%);
   transform: scaleY(0);
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 0 2px 2px 0;
 }
 
 .sidebar-nav > ul > li > a:hover {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(167, 139, 250, 0.08) 100%);
+  background: linear-gradient(135deg, rgba(0, 122, 255, 0.08) 0%, rgba(51, 153, 255, 0.06) 100%);
   color: var(--theme-color);
   transform: translateX(3px);
-  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.12);
+  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.08);
 }
 
 .sidebar-nav > ul > li > a.active {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(167, 139, 250, 0.1) 100%);
+  background: rgba(0, 122, 255, 0.1);
   color: var(--theme-color);
   font-weight: 700;
-  box-shadow: 
-    0 2px 12px rgba(139, 92, 246, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  box-shadow: none;
 }
 
 .sidebar-nav > ul > li > a.active::before {
@@ -402,7 +380,7 @@ body::before {
   top: 0;
   bottom: 0;
   width: 2px;
-  background: linear-gradient(180deg, rgba(139, 92, 246, 0.15) 0%, rgba(139, 92, 246, 0.04) 100%);
+  background: linear-gradient(180deg, rgba(0, 122, 255, 0.12) 0%, rgba(0, 122, 255, 0.03) 100%);
   border-radius: 2px;
 }
 
@@ -439,21 +417,21 @@ body::before {
 }
 
 /* 分类色系 - 小圆点 */
-.sidebar-nav > ul > li:nth-child(3) ul ul li a::before { background: rgba(139, 92, 246, 0.35); }
-.sidebar-nav > ul > li:nth-child(4) ul ul li a::before { background: rgba(139, 92, 246, 0.35); }
-.sidebar-nav > ul > li:nth-child(5) ul ul li a::before { background: rgba(59, 130, 246, 0.35); }
-.sidebar-nav > ul > li:nth-child(6) ul ul li a::before { background: rgba(16, 185, 129, 0.35); }
-.sidebar-nav > ul > li:nth-child(7) ul ul li a::before { background: rgba(245, 158, 11, 0.35); }
-.sidebar-nav > ul > li:nth-child(8) ul ul li a::before { background: rgba(236, 72, 153, 0.35); }
-.sidebar-nav > ul > li:nth-child(9) ul ul li a::before { background: rgba(6, 182, 212, 0.35); }
-.sidebar-nav > ul > li:nth-child(10) ul ul li a::before { background: rgba(107, 114, 128, 0.35); }
-.sidebar-nav > ul > li:nth-child(11) ul ul li a::before { background: rgba(139, 92, 246, 0.35); }
-.sidebar-nav > ul > li:nth-child(12) ul ul li a::before { background: rgba(139, 92, 246, 0.35); }
-.sidebar-nav > ul > li:nth-child(13) ul ul li a::before { background: rgba(139, 92, 246, 0.35); }
-.sidebar-nav > ul > li:nth-child(14) ul ul li a::before { background: rgba(139, 92, 246, 0.35); }
+.sidebar-nav > ul > li:nth-child(3) ul ul li a::before { background: rgba(0, 122, 255, 0.35); }
+.sidebar-nav > ul > li:nth-child(4) ul ul li a::before { background: rgba(0, 122, 255, 0.35); }
+.sidebar-nav > ul > li:nth-child(5) ul ul li a::before { background: rgba(0, 122, 255, 0.35); }
+.sidebar-nav > ul > li:nth-child(6) ul ul li a::before { background: rgba(0, 122, 255, 0.35); }
+.sidebar-nav > ul > li:nth-child(7) ul ul li a::before { background: rgba(0, 122, 255, 0.35); }
+.sidebar-nav > ul > li:nth-child(8) ul ul li a::before { background: rgba(0, 122, 255, 0.35); }
+.sidebar-nav > ul > li:nth-child(9) ul ul li a::before { background: rgba(0, 122, 255, 0.35); }
+.sidebar-nav > ul > li:nth-child(10) ul ul li a::before { background: rgba(0, 122, 255, 0.35); }
+.sidebar-nav > ul > li:nth-child(11) ul ul li a::before { background: rgba(0, 122, 255, 0.35); }
+.sidebar-nav > ul > li:nth-child(12) ul ul li a::before { background: rgba(0, 122, 255, 0.35); }
+.sidebar-nav > ul > li:nth-child(13) ul ul li a::before { background: rgba(0, 122, 255, 0.35); }
+.sidebar-nav > ul > li:nth-child(14) ul ul li a::before { background: rgba(0, 122, 255, 0.35); }
 
 .sidebar-nav ul ul li a:hover {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(167, 139, 250, 0.05) 100%);
+  background: linear-gradient(135deg, rgba(0, 122, 255, 0.06) 0%, rgba(51, 153, 255, 0.04) 100%);
   color: var(--theme-color);
   transform: translateX(4px);
 }
@@ -463,24 +441,24 @@ body::before {
   box-shadow: 0 0 8px currentColor;
 }
 
-.sidebar-nav > ul > li:nth-child(3) ul ul li a:hover::before { background: #8B5CF6; color: #8B5CF6; }
-.sidebar-nav > ul > li:nth-child(4) ul ul li a:hover::before { background: #8B5CF6; color: #8B5CF6; }
-.sidebar-nav > ul > li:nth-child(5) ul ul li a:hover::before { background: #3B82F6; color: #3B82F6; }
-.sidebar-nav > ul > li:nth-child(6) ul ul li a:hover::before { background: #10B981; color: #10B981; }
-.sidebar-nav > ul > li:nth-child(7) ul ul li a:hover::before { background: #F59E0B; color: #F59E0B; }
-.sidebar-nav > ul > li:nth-child(8) ul ul li a:hover::before { background: #EC4899; color: #EC4899; }
-.sidebar-nav > ul > li:nth-child(9) ul ul li a:hover::before { background: #06B6D4; color: #06B6D4; }
-.sidebar-nav > ul > li:nth-child(10) ul ul li a:hover::before { background: #6B7280; color: #6B7280; }
-.sidebar-nav > ul > li:nth-child(11) ul ul li a:hover::before { background: #8B5CF6; color: #8B5CF6; }
-.sidebar-nav > ul > li:nth-child(12) ul ul li a:hover::before { background: #8B5CF6; color: #8B5CF6; }
-.sidebar-nav > ul > li:nth-child(13) ul ul li a:hover::before { background: #8B5CF6; color: #8B5CF6; }
-.sidebar-nav > ul > li:nth-child(14) ul ul li a:hover::before { background: #8B5CF6; color: #8B5CF6; }
+.sidebar-nav > ul > li:nth-child(3) ul ul li a:hover::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(4) ul ul li a:hover::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(5) ul ul li a:hover::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(6) ul ul li a:hover::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(7) ul ul li a:hover::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(8) ul ul li a:hover::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(9) ul ul li a:hover::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(10) ul ul li a:hover::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(11) ul ul li a:hover::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(12) ul ul li a:hover::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(13) ul ul li a:hover::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(14) ul ul li a:hover::before { background: #007AFF; color: #007AFF; }
 
 .sidebar-nav ul ul li a.active {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.12) 0%, rgba(167, 139, 250, 0.08) 100%);
+  background: linear-gradient(135deg, rgba(0, 122, 255, 0.1) 0%, rgba(51, 153, 255, 0.06) 100%);
   color: var(--theme-color);
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.06);
 }
 
 .sidebar-nav ul ul li a.active::before {
@@ -489,20 +467,20 @@ body::before {
   box-shadow: 0 0 12px currentColor;
 }
 
-.sidebar-nav > ul > li:nth-child(3) ul ul li a.active::before { background: #8B5CF6; color: #8B5CF6; }
-.sidebar-nav > ul > li:nth-child(4) ul ul li a.active::before { background: #8B5CF6; color: #8B5CF6; }
-.sidebar-nav > ul > li:nth-child(5) ul ul li a.active::before { background: #3B82F6; color: #3B82F6; }
-.sidebar-nav > ul > li:nth-child(6) ul ul li a.active::before { background: #10B981; color: #10B981; }
-.sidebar-nav > ul > li:nth-child(7) ul ul li a.active::before { background: #F59E0B; color: #F59E0B; }
-.sidebar-nav > ul > li:nth-child(8) ul ul li a.active::before { background: #EC4899; color: #EC4899; }
-.sidebar-nav > ul > li:nth-child(9) ul ul li a.active::before { background: #06B6D4; color: #06B6D4; }
-.sidebar-nav > ul > li:nth-child(10) ul ul li a.active::before { background: #6B7280; color: #6B7280; }
-.sidebar-nav > ul > li:nth-child(11) ul ul li a.active::before { background: #8B5CF6; color: #8B5CF6; }
-.sidebar-nav > ul > li:nth-child(12) ul ul li a.active::before { background: #8B5CF6; color: #8B5CF6; }
-.sidebar-nav > ul > li:nth-child(13) ul ul li a.active::before { background: #8B5CF6; color: #8B5CF6; }
-.sidebar-nav > ul > li:nth-child(14) ul ul li a.active::before { background: #8B5CF6; color: #8B5CF6; }
+.sidebar-nav > ul > li:nth-child(3) ul ul li a.active::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(4) ul ul li a.active::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(5) ul ul li a.active::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(6) ul ul li a.active::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(7) ul ul li a.active::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(8) ul ul li a.active::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(9) ul ul li a.active::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(10) ul ul li a.active::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(11) ul ul li a.active::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(12) ul ul li a.active::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(13) ul ul li a.active::before { background: #007AFF; color: #007AFF; }
+.sidebar-nav > ul > li:nth-child(14) ul ul li a.active::before { background: #007AFF; color: #007AFF; }
 
-/* ==================== 主内容区 - 精确还原设计图 ==================== */
+/* ==================== 主内容区 - iOS 极简 ==================== */
 .content {
   padding: 0;
   position: relative;
@@ -511,21 +489,21 @@ body::before {
 
 .markdown-section {
   position: fixed !important;
-  top: 130px !important;
+  top: 100px !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
   bottom: 20px !important;
   width: calc(100% - 40px);
-  max-width: 1300px;
+  max-width: 960px;
   margin: 0 !important;
   z-index: 1 !important;
-  padding: 40px;
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(40px) saturate(220%);
-  -webkit-backdrop-filter: blur(40px) saturate(220%);
-  border-radius: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.06);
+  padding: 24px 32px;
+  background: #FFFFFF;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
   overflow-y: auto !important;
   overflow-x: hidden;
 }
@@ -557,10 +535,10 @@ body::before {
 .markdown-section h1::before {
   content: '';
   display: inline-block;
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 24px;
   background: var(--theme-color);
-  border-radius: 50%;
+  border-radius: 3px;
   margin-right: 10px;
   flex-shrink: 0;
 }
@@ -637,9 +615,9 @@ body::before {
   border-radius: 12px;
   padding: 18px;
   margin: 18px 0;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
   overflow-x: auto;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: none;
 }
 
 .markdown-section code {
@@ -650,7 +628,7 @@ body::before {
 
 .markdown-section p code,
 .markdown-section li code {
-  background: rgba(139, 92, 246, 0.1);
+  background: rgba(0, 122, 255, 0.08);
   color: var(--theme-color);
   padding: 3px 8px;
   border-radius: 8px;
@@ -660,11 +638,24 @@ body::before {
 
 /* ==================== 引用块 ==================== */
 .markdown-section blockquote {
-  background: rgba(139, 92, 246, 0.05);
-  border-left: 3px solid var(--theme-color);
+  background: rgba(0, 122, 255, 0.03);
+  border-left: none;
   border-radius: 12px;
-  padding: 14px 18px;
+  padding: 16px 20px;
   margin: 18px 0;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  position: relative;
+}
+
+.markdown-section blockquote::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
+  background: var(--theme-color);
+  border-radius: 0 3px 3px 0;
 }
 
 .markdown-section blockquote p {
@@ -678,15 +669,15 @@ body::before {
   border-collapse: separate;
   border-spacing: 0;
   margin: 20px 0;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  border: none;
 }
 
 .markdown-section table thead {
-  background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
+  background: var(--theme-color);
   color: white;
 }
 
@@ -710,17 +701,17 @@ body::before {
 }
 
 .markdown-section table tr:hover {
-  background: rgba(139, 92, 246, 0.04);
+  background: rgba(0, 122, 255, 0.03);
   transition: background 0.2s ease;
 }
 
 /* ==================== 图片样式 ==================== */
 .markdown-section img {
   max-width: 100%;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
   margin: 20px 0;
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: none;
 }
 
 /* ==================== 分割线 ==================== */
@@ -765,7 +756,7 @@ body::before {
 }
 
 .anime-helper:hover .anime-helper-container {
-  box-shadow: 0 16px 48px rgba(139, 92, 246, 0.3);
+  box-shadow: 0 16px 48px rgba(0, 122, 255, 0.15);
   border-color: rgba(255, 255, 255, 1);
 }
 
@@ -850,7 +841,7 @@ body::before {
 
 /* 黑暗模式 - 所有文字使用亮色 */
 body.dark-mode {
-  --bg-body: linear-gradient(135deg, #1a1a2e 0%, #16213e 30%, #0f3460 60%, #1a1a2e 100%);
+  --bg-body: #1A1A2E;
   --bg-sidebar: rgba(30, 30, 46, 0.7);
   --bg-content: rgba(30, 30, 46, 0.85);
   --text-primary: #FFFFFF;
@@ -861,27 +852,23 @@ body.dark-mode {
 
 body.dark-mode .sidebar {
   background: rgba(30, 30, 46, 0.85) !important;
-  border-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
-    0 2px 8px rgba(0, 0, 0, 0.2);
+  border: none;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
 }
 
 body.dark-mode .sidebar:hover {
-  box-shadow: 
-    0 12px 48px rgba(139, 92, 246, 0.25),
-    0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 24px rgba(0, 122, 255, 0.12);
 }
 
 /* 黑暗模式 - 侧边栏头部 */
 body.dark-mode .sidebar-header {
-  border-bottom-color: rgba(139, 92, 246, 0.15);
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(167, 139, 250, 0.04) 100%);
+  border-bottom-color: rgba(0, 122, 255, 0.1);
+  background: linear-gradient(135deg, rgba(0, 122, 255, 0.06) 0%, rgba(51, 153, 255, 0.03) 100%);
 }
 
 /* 黑暗模式 - 搜索框 */
 body.dark-mode .search input {
-  border-color: rgba(139, 92, 246, 0.2);
+  border-color: rgba(0, 122, 255, 0.15);
   background: rgba(30, 30, 46, 0.6);
   color: #FFFFFF;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -892,16 +879,17 @@ body.dark-mode .search input::placeholder {
 }
 
 body.dark-mode .search input:focus {
-  border-color: #A78BFA;
+  border-color: #3399FF;
   background: rgba(30, 30, 46, 0.8);
   box-shadow: 
-    0 0 0 4px rgba(139, 92, 246, 0.15),
-    0 4px 12px rgba(139, 92, 246, 0.2);
+    0 0 0 4px rgba(0, 122, 255, 0.12),
+    0 4px 12px rgba(0, 122, 255, 0.12);
 }
 
 body.dark-mode .markdown-section {
   background: rgba(30, 30, 46, 0.85);
-  border-color: rgba(255, 255, 255, 0.1);
+  border: none;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* 黑暗模式 - 标题颜色（纯白色） */
@@ -926,7 +914,7 @@ body.dark-mode .markdown-section h1 {
 }
 
 body.dark-mode .markdown-section h1::before {
-  background: #A78BFA !important;
+  background: #3399FF !important;
 }
 
 /* 黑暗模式 - 段落和列表颜色 */
@@ -938,7 +926,7 @@ body.dark-mode .markdown-section td {
 
 /* 黑暗模式 - 引用块 */
 body.dark-mode .markdown-section blockquote {
-  background: rgba(139, 92, 246, 0.15);
+  background: rgba(0, 122, 255, 0.08);
 }
 
 body.dark-mode .markdown-section blockquote p {
@@ -948,7 +936,7 @@ body.dark-mode .markdown-section blockquote p {
 /* 黑暗模式 - 表格 */
 body.dark-mode .markdown-section table {
   background: rgba(30, 30, 46, 0.9);
-  border-color: rgba(255, 255, 255, 0.15);
+  border: none;
 }
 
 body.dark-mode .markdown-section table th {
@@ -963,18 +951,18 @@ body.dark-mode .markdown-section table td {
 /* 黑暗模式 - 代码 */
 body.dark-mode .markdown-section p code,
 body.dark-mode .markdown-section li code {
-  background: rgba(139, 92, 246, 0.2);
-  color: #A78BFA;
-  border-color: rgba(139, 92, 246, 0.3);
+  background: rgba(0, 122, 255, 0.18);
+  color: #3399FF;
+  border: none;
 }
 
 /* 黑暗模式 - 链接 */
 body.dark-mode .markdown-section a {
-  color: #A78BFA;
+  color: #3399FF;
 }
 
 body.dark-mode .markdown-section a:hover {
-  color: #C4B5FD;
+  color: #80BFFF;
 }
 
 body.dark-mode .anime-helper-bubble {
@@ -998,7 +986,7 @@ body.dark-mode .theme-toggle {
 /* 黑暗模式 - 侧边栏分类标题 */
 body.dark-mode .sidebar-nav > ul > li > strong {
   color: #8890A0 !important;
-  border-top-color: rgba(139, 92, 246, 0.12);
+  border-top-color: rgba(0, 122, 255, 0.08);
 }
 
 body.dark-mode .sidebar-nav > ul > li > strong::before {
@@ -1011,13 +999,13 @@ body.dark-mode .sidebar-nav > ul > li > a {
 }
 
 body.dark-mode .sidebar-nav > ul > li > a:hover {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(167, 139, 250, 0.12) 100%) !important;
-  color: #C4B5FD !important;
+  background: linear-gradient(135deg, rgba(0, 122, 255, 0.15) 0%, rgba(51, 153, 255, 0.1) 100%) !important;
+  color: #80BFFF !important;
 }
 
 body.dark-mode .sidebar-nav > ul > li > a.active {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(167, 139, 250, 0.18) 100%) !important;
-  color: #C4B5FD !important;
+  background: rgba(0, 122, 255, 0.2) !important;
+  color: #3399FF !important;
 }
 
 /* 黑暗模式 - 二级模块链接 */
@@ -1026,32 +1014,32 @@ body.dark-mode .sidebar-nav ul ul li a {
 }
 
 body.dark-mode .sidebar-nav ul ul li a:hover {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(167, 139, 250, 0.1) 100%) !important;
-  color: #C4B5FD !important;
+  background: linear-gradient(135deg, rgba(0, 122, 255, 0.1) 0%, rgba(51, 153, 255, 0.06) 100%) !important;
+  color: #80BFFF !important;
 }
 
 body.dark-mode .sidebar-nav ul ul li a.active {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.22) 0%, rgba(167, 139, 250, 0.15) 100%) !important;
-  color: #C4B5FD !important;
+  background: linear-gradient(135deg, rgba(0, 122, 255, 0.16) 0%, rgba(51, 153, 255, 0.1) 100%) !important;
+  color: #80BFFF !important;
 }
 
 body.dark-mode .sidebar-nav ul ul::before {
-  background: linear-gradient(180deg, rgba(139, 92, 246, 0.3) 0%, rgba(139, 92, 246, 0.08) 100%);
+  background: linear-gradient(180deg, rgba(0, 122, 255, 0.2) 0%, rgba(0, 122, 255, 0.05) 100%);
 }
 
 /* 黑暗模式 - 分类色系圆点亮度提升 */
-body.dark-mode .sidebar-nav > ul > li:nth-child(3) ul ul li a::before { background: rgba(139, 92, 246, 0.5); }
-body.dark-mode .sidebar-nav > ul > li:nth-child(4) ul ul li a::before { background: rgba(139, 92, 246, 0.5); }
-body.dark-mode .sidebar-nav > ul > li:nth-child(5) ul ul li a::before { background: rgba(59, 130, 246, 0.5); }
-body.dark-mode .sidebar-nav > ul > li:nth-child(6) ul ul li a::before { background: rgba(16, 185, 129, 0.5); }
-body.dark-mode .sidebar-nav > ul > li:nth-child(7) ul ul li a::before { background: rgba(245, 158, 11, 0.5); }
-body.dark-mode .sidebar-nav > ul > li:nth-child(8) ul ul li a::before { background: rgba(236, 72, 153, 0.5); }
-body.dark-mode .sidebar-nav > ul > li:nth-child(9) ul ul li a::before { background: rgba(6, 182, 212, 0.5); }
-body.dark-mode .sidebar-nav > ul > li:nth-child(10) ul ul li a::before { background: rgba(107, 114, 128, 0.5); }
-body.dark-mode .sidebar-nav > ul > li:nth-child(11) ul ul li a::before { background: rgba(139, 92, 246, 0.5); }
-body.dark-mode .sidebar-nav > ul > li:nth-child(12) ul ul li a::before { background: rgba(139, 92, 246, 0.5); }
-body.dark-mode .sidebar-nav > ul > li:nth-child(13) ul ul li a::before { background: rgba(139, 92, 246, 0.5); }
-body.dark-mode .sidebar-nav > ul > li:nth-child(14) ul ul li a::before { background: rgba(139, 92, 246, 0.5); }
+body.dark-mode .sidebar-nav > ul > li:nth-child(3) ul ul li a::before { background: rgba(0, 122, 255, 0.4); }
+body.dark-mode .sidebar-nav > ul > li:nth-child(4) ul ul li a::before { background: rgba(0, 122, 255, 0.4); }
+body.dark-mode .sidebar-nav > ul > li:nth-child(5) ul ul li a::before { background: rgba(0, 122, 255, 0.4); }
+body.dark-mode .sidebar-nav > ul > li:nth-child(6) ul ul li a::before { background: rgba(0, 122, 255, 0.4); }
+body.dark-mode .sidebar-nav > ul > li:nth-child(7) ul ul li a::before { background: rgba(0, 122, 255, 0.4); }
+body.dark-mode .sidebar-nav > ul > li:nth-child(8) ul ul li a::before { background: rgba(0, 122, 255, 0.4); }
+body.dark-mode .sidebar-nav > ul > li:nth-child(9) ul ul li a::before { background: rgba(0, 122, 255, 0.4); }
+body.dark-mode .sidebar-nav > ul > li:nth-child(10) ul ul li a::before { background: rgba(0, 122, 255, 0.4); }
+body.dark-mode .sidebar-nav > ul > li:nth-child(11) ul ul li a::before { background: rgba(0, 122, 255, 0.4); }
+body.dark-mode .sidebar-nav > ul > li:nth-child(12) ul ul li a::before { background: rgba(0, 122, 255, 0.4); }
+body.dark-mode .sidebar-nav > ul > li:nth-child(13) ul ul li a::before { background: rgba(0, 122, 255, 0.4); }
+body.dark-mode .sidebar-nav > ul > li:nth-child(14) ul ul li a::before { background: rgba(0, 122, 255, 0.4); }
 
 body.dark-mode .sidebar-nav ul ul li a:hover::before,
 body.dark-mode .sidebar-nav ul ul li a.active::before {
@@ -1095,20 +1083,20 @@ body.dark-mode .sidebar-nav ul ul li a.active::before {
   padding: 12px;
   margin: 16px 0;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(139, 92, 246, 0.08);
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  background: rgba(255, 255, 255, 0.6);
+  border: none;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.3s ease;
   overflow: visible;
 }
 
 body.dark-mode .markdown-section .mermaid {
   background: rgba(30, 30, 46, 0.5);
-  border-color: rgba(139, 92, 246, 0.15);
+  border-color: rgba(0, 122, 255, 0.1);
 }
 
 .markdown-section .mermaid:hover {
-  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.12);
-  border-color: rgba(139, 92, 246, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 122, 255, 0.08);
 }
 
 /* 图表右下角放大提示 */
@@ -1135,6 +1123,110 @@ body.dark-mode .markdown-section .mermaid::after {
 
 .markdown-section .mermaid:hover::after {
   opacity: 1;
+}
+
+/* ===== Mermaid SVG CSS 备用覆盖 ===== */
+.mermaid > svg .node rect,
+.mermaid > svg .node circle,
+.mermaid > svg .node ellipse,
+.mermaid > svg .node polygon,
+.mermaid > svg .label-container,
+.mermaid > svg .cluster rect {
+  fill: #FFFFFF !important;
+  stroke: #E5E5EA !important;
+  stroke-width: 1.5px !important;
+}
+.mermaid > svg .edgePath .path,
+.mermaid > svg .edgePath path {
+  stroke: #C7C7CC !important;
+  fill: none !important;
+}
+.mermaid > svg .edgePath marker path,
+.mermaid > svg .marker {
+  fill: #C7C7CC !important;
+  stroke: #C7C7CC !important;
+}
+.mermaid > svg .edgeLabel rect {
+  fill: #FFFFFF !important;
+  stroke: none !important;
+}
+.mermaid > svg .edgeLabel span,
+.mermaid > svg .edgeLabel foreignObject {
+  color: #48484A !important;
+}
+.mermaid > svg .node text,
+.mermaid > svg .node .label {
+  fill: #1D1D1F !important;
+  color: #1D1D1F !important;
+}
+.mermaid > svg .cluster-label .node-label,
+.mermaid > svg .titleText {
+  fill: #1D1D1F !important;
+}
+.mermaid > svg .actor rect,
+.mermaid > svg .actor circle {
+  fill: #F5F5F7 !important;
+  stroke: #E5E5EA !important;
+}
+.mermaid > svg .actor text {
+  fill: #1D1D1F !important;
+}
+.mermaid > svg .messageLine0,
+.mermaid > svg .messageLine1 {
+  stroke: #C7C7CC !important;
+}
+.mermaid > svg .activation0,
+.mermaid > svg .activation1,
+.mermaid > svg .activation2 {
+  fill: rgba(0, 122, 255, 0.08) !important;
+  stroke: #E5E5EA !important;
+}
+.mermaid > svg .statediagram-state rect {
+  fill: #FFFFFF !important;
+  stroke: #E5E5EA !important;
+}
+.mermaid > svg .task rect,
+.mermaid > svg .task {
+  fill: #F5F5F7 !important;
+  stroke: #E5E5EA !important;
+}
+/* 暗色模式 SVG 覆盖 */
+body.dark-mode .mermaid > svg .node rect,
+body.dark-mode .mermaid > svg .node circle,
+body.dark-mode .mermaid > svg .node ellipse,
+body.dark-mode .mermaid > svg .node polygon,
+body.dark-mode .mermaid > svg .label-container,
+body.dark-mode .mermaid > svg .cluster rect {
+  fill: rgba(45, 45, 60, 0.9) !important;
+  stroke: #48485A !important;
+}
+body.dark-mode .mermaid > svg .edgePath .path,
+body.dark-mode .mermaid > svg .edgePath path {
+  stroke: #5A5A6E !important;
+}
+body.dark-mode .mermaid > svg .edgeLabel rect {
+  fill: rgba(30, 30, 46, 0.9) !important;
+}
+body.dark-mode .mermaid > svg .node text,
+body.dark-mode .mermaid > svg .node .label,
+body.dark-mode .mermaid > svg .cluster-label .node-label,
+body.dark-mode .mermaid > svg .titleText {
+  fill: #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+body.dark-mode .mermaid > svg .actor rect,
+body.dark-mode .mermaid > svg .actor circle {
+  fill: rgba(40, 40, 56, 0.9) !important;
+  stroke: #48485A !important;
+}
+body.dark-mode .mermaid > svg .actor text {
+  fill: #FFFFFF !important;
+}
+body.dark-mode .mermaid > svg .activation0,
+body.dark-mode .mermaid > svg .activation1,
+body.dark-mode .mermaid > svg .activation2 {
+  fill: rgba(0, 122, 255, 0.12) !important;
+  stroke: #48485A !important;
 }
 
 /* --- 全屏查看器 --- */
@@ -1224,7 +1316,7 @@ body.dark-mode .mermaid-viewer-toolbar button {
 }
 
 body.dark-mode .mermaid-viewer-toolbar button:hover {
-  background: rgba(139, 92, 246, 0.4);
+  background: rgba(0, 122, 255, 0.4);
   color: #fff;
 }
 
@@ -1268,18 +1360,17 @@ body.dark-mode .mermaid-viewer-hint {
 }
 
 /* ==================== 响应式设计 ==================== */
-/* 笔记本适配 - 解决内容与侧边栏重叠问题 */
+/* 笔记本适配 - sidebar旁放内容 */
 @media (max-width: 1599px) and (min-width: 769px) {
   .markdown-section {
     left: 300px !important;
-    right: 20px !important;
+    right: 220px !important;
     bottom: 20px !important;
     transform: none !important;
     width: auto !important;
     max-width: none !important;
     top: 100px !important;
   }
-
   .branch-badge {
     left: 290px;
   }
@@ -1388,17 +1479,15 @@ body.dark-mode #main h6 {
 .right-sidebar {
   position: fixed;
   right: 16px;
-  top: 230px;
+  top: 180px;
   bottom: 16px;
-  width: 220px;
+  width: 200px;
   z-index: 998;
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(30px) saturate(200%);
-  -webkit-backdrop-filter: blur(30px) saturate(200%);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  box-shadow:
-    0 8px 32px rgba(139, 92, 246, 0.12),
-    0 2px 8px rgba(0, 0, 0, 0.04);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: none;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
   border-radius: 20px;
   padding: 16px 0;
   overflow-y: auto;
@@ -1407,9 +1496,7 @@ body.dark-mode #main h6 {
 }
 
 .right-sidebar:hover {
-  box-shadow:
-    0 12px 48px rgba(139, 92, 246, 0.18),
-    0 4px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
 }
 
 .right-sidebar::-webkit-scrollbar {
@@ -1421,7 +1508,7 @@ body.dark-mode #main h6 {
 }
 
 .right-sidebar::-webkit-scrollbar-thumb {
-  background: rgba(139, 92, 246, 0.15);
+  background: rgba(0, 122, 255, 0.1);
   border-radius: 10px;
 }
 
@@ -1433,7 +1520,7 @@ body.dark-mode #main h6 {
   text-transform: uppercase;
   padding: 4px 18px 10px;
   margin: 0 0 8px;
-  border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+  border-bottom: 1px solid rgba(0, 122, 255, 0.08);
 }
 
 .right-sidebar-nav ul {
@@ -1462,14 +1549,14 @@ body.dark-mode #main h6 {
 .right-sidebar-nav a:hover {
   color: var(--theme-color);
   border-left-color: var(--theme-color-lighter);
-  background: linear-gradient(90deg, rgba(139, 92, 246, 0.06) 0%, transparent 100%);
+  background: linear-gradient(90deg, rgba(0, 122, 255, 0.05) 0%, transparent 100%);
 }
 
 .right-sidebar-nav a.active-section {
   color: var(--theme-color);
   font-weight: 600;
   border-left-color: var(--theme-color);
-  background: linear-gradient(90deg, rgba(139, 92, 246, 0.1) 0%, transparent 100%);
+  background: linear-gradient(90deg, rgba(0, 122, 255, 0.08) 0%, transparent 100%);
 }
 
 .right-sidebar-nav .h3-item {
@@ -1491,21 +1578,17 @@ body.dark-mode #main h6 {
 /* 黑暗模式 */
 body.dark-mode .right-sidebar {
   background: rgba(30, 30, 46, 0.7);
-  border-color: rgba(255, 255, 255, 0.1);
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.3),
-    0 2px 8px rgba(0, 0, 0, 0.2);
+  border: none;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
 }
 
 body.dark-mode .right-sidebar:hover {
-  box-shadow:
-    0 12px 48px rgba(139, 92, 246, 0.25),
-    0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 24px rgba(0, 122, 255, 0.12);
 }
 
 body.dark-mode .right-sidebar-title {
   color: #8890A0;
-  border-bottom-color: rgba(139, 92, 246, 0.15);
+  border-bottom-color: rgba(0, 122, 255, 0.1);
 }
 
 body.dark-mode .right-sidebar-nav a {
@@ -1513,13 +1596,13 @@ body.dark-mode .right-sidebar-nav a {
 }
 
 body.dark-mode .right-sidebar-nav a:hover {
-  color: #C4B5FD;
-  border-left-color: rgba(139, 92, 246, 0.4);
-  background: linear-gradient(90deg, rgba(139, 92, 246, 0.12) 0%, transparent 100%);
+  color: #80BFFF;
+  border-left-color: rgba(0, 122, 255, 0.3);
+  background: linear-gradient(90deg, rgba(0, 122, 255, 0.08) 0%, transparent 100%);
 }
 
 body.dark-mode .right-sidebar-nav a.active-section {
-  color: #C4B5FD;
-  border-left-color: #A78BFA;
-  background: linear-gradient(90deg, rgba(139, 92, 246, 0.22) 0%, transparent 100%);
+  color: #80BFFF;
+  border-left-color: #3399FF;
+  background: linear-gradient(90deg, rgba(0, 122, 255, 0.16) 0%, transparent 100%);
 }
