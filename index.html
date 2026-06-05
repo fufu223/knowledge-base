@@ -3,714 +3,572 @@
 <head>
   <meta charset="UTF-8">
   <title>Fastsun Platform 知识库</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="description" content="Fastsun 平台框架完整技术文档">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  
-  <!-- 网页图标 -->
+  <meta name="theme-color" content="#f7f8fb">
+
   <link rel="icon" type="image/png" href="images/logo.png">
   <link rel="apple-touch-icon" href="images/logo.png">
-  
-  <!-- Docsify 主题 -->
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
-  
-  <!-- 现代化苹果风格主题 -->
   <link rel="stylesheet" href="theme-modern.css">
 </head>
 <body>
+  <header class="kb-topbar" aria-label="知识库顶部导航">
+    <div class="kb-topbar-inner">
+      <button class="kb-menu-button" type="button" aria-label="打开导航" aria-expanded="false">
+        <span></span>
+        <span></span>
+      </button>
+
+      <a class="kb-brand" href="#/" aria-label="Fastsun 知识库首页">
+        <img src="images/logo.png" alt="" class="kb-brand-logo">
+        <span class="kb-brand-copy">
+          <span class="kb-brand-name">Fastsun</span>
+          <span class="kb-brand-subtitle">Platform Docs</span>
+        </span>
+      </a>
+
+      <div class="kb-search-shell" id="kb-search-slot" role="search" aria-label="搜索文档">
+        <span class="kb-search-placeholder">搜索文档、模块或配置项</span>
+      </div>
+
+      <div class="kb-topbar-actions">
+        <label class="kb-version" for="branch-select">
+          <span>版本</span>
+          <select id="branch-select" onchange="switchBranch(this.value)">
+            <option value="2.3.26-20260509-1-RELEASE" selected>2.3.26</option>
+          </select>
+        </label>
+
+        <button class="kb-icon-button theme-toggle" type="button" onclick="toggleTheme()" title="切换深色模式" aria-label="切换深色模式">
+          <span id="theme-icon" aria-hidden="true">☾</span>
+        </button>
+
+        <button class="kb-asuka" type="button" onclick="toggleAsukaMessage()" title="明日香文档助手" aria-label="明日香文档助手">
+          <img src="images/anime-helper.png" alt="明日香" class="kb-asuka-img">
+          <span class="kb-asuka-message" id="asuka-message">工作辛苦了</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="kb-mobile-scrim" aria-hidden="true"></div>
   <div id="app">加载中...</div>
-  
-  <!-- 右侧目录边栏 -->
-  <div class="right-sidebar" id="right-sidebar"></div>
-  
-  <!-- 分支版本标识 -->
-  <div class="branch-badge" id="branch-badge">
-    <span class="branch-label">分支:</span>
-    <select class="branch-select" id="branch-select" onchange="switchBranch(this.value)">
-      <option value="2.3.26-20260509-1-RELEASE" selected>2.3.26-20260509-1-RELEASE</option>
-    </select>
-  </div>
-  
-  <!-- 动漫助手 -->
-  <div class="anime-helper" onclick="toggleAnimeMessage()">
-    <div class="anime-helper-bubble">
-      <div class="anime-helper-bubble-text" id="anime-message">💪 工作辛苦了！</div>
-    </div>
-    <div class="anime-helper-container">
-      <img src="images/anime-helper.png" alt="文档助手" class="anime-helper-img">
-    </div>
-  </div>
-  
-  <!-- 黑暗模式开关 -->
-  <button class="theme-toggle" onclick="toggleTheme()" title="切换主题">
-    <span id="theme-icon">🌙</span>
-  </button>
-  
+
   <script>
+    window.__FASTSUN_MERMAID_THEME__ = {
+      theme: 'base',
+      securityLevel: 'loose',
+      startOnLoad: false,
+      fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif',
+      themeVariables: {
+        background: '#ffffff',
+        primaryColor: '#f7f9fc',
+        primaryTextColor: '#111827',
+        primaryBorderColor: '#d9e1ec',
+        secondaryColor: '#eef6ff',
+        secondaryTextColor: '#111827',
+        secondaryBorderColor: '#c8d9ee',
+        tertiaryColor: '#f6f2ff',
+        tertiaryTextColor: '#111827',
+        tertiaryBorderColor: '#d7c8ff',
+        lineColor: '#8b9aae',
+        textColor: '#111827',
+        mainBkg: '#ffffff',
+        secondBkg: '#f4f7fb',
+        borderColor: '#d9e1ec',
+        clusterBkg: '#f7f9fc',
+        clusterBorder: '#d9e1ec',
+        noteBkgColor: '#fff7e8',
+        noteBorderColor: '#f0c36a',
+        noteTextColor: '#111827',
+        fontSize: '14px'
+      },
+      flowchart: {
+        curve: 'basis',
+        htmlLabels: true,
+        padding: 16
+      },
+      sequence: {
+        actorMargin: 64,
+        boxMargin: 12,
+        messageMargin: 42,
+        mirrorActors: false
+      }
+    };
+
     window.$docsify = {
       name: 'Fastsun 知识库',
       repo: 'https://github.com/fufu223/knowledge-base',
-      
-      // 基础路径配置（重要！）时设置为 '/'
-      // GitHub Pages 部署时设置为 '/仓库名/'
-      // 例如：仓库名为 knowledge-base，则设置为 '/knowledge-base/'
-      basePath: '/',  // 本地预览使用 '/'，部署时修改为仓库名
-      
-      // 路由别名配置（解决GitHub Pages下划线文件问题）
+      basePath: '/knowledge-base',
       alias: {
         '/.*/_sidebar.md': '/_sidebar.md',
         '/_sidebar.md': '/_sidebar.md'
       },
-      
-      // 侧边栏配置
       loadSidebar: true,
       loadNavbar: false,
-      homepage: 'README.md',  // 首页文件
-      subMaxLevel: 0,  // 页面标题不自动加入左侧边栏（交给右侧边栏）
-      auto2top: false,  // 由 doneEach 钩子手动控制回到顶部
-      
-      // 锚点定位偏移量（重要！）
-      topMargin: 100,  // 考虑固定元素的高度，避免锚点被遮挡
-      
-      // 外部链接处理
+      homepage: 'README.md',
+      subMaxLevel: 0,
+      auto2top: true,
+      topMargin: 88,
       externalLinkTarget: '_blank',
-      
-      // 路由模式
       routerMode: 'hash',
-      
-      // 搜索功能
       search: {
-        maxAge: 86400000, // 缓存一天
+        maxAge: 86400000,
         paths: 'auto',
-        placeholder: '搜索文档...',
-        noData: '找不到结果',
+        placeholder: '搜索文档、模块或配置项',
+        noData: '没有找到匹配内容',
         depth: 6,
         hideOtherSidebarContent: false,
-        namespace: 'fastsun-kb'
+        namespace: 'fastsun-platform-kb'
       },
-      
-      // 代码高亮
       markdown: {
         renderer: {
           code: function(code, lang) {
-            if (lang === 'mermaid') {
-              return '<div class="mermaid">' + code + '</div>';
+            var language = (lang || '').toLowerCase();
+            if (language === 'mermaid') {
+              return '<div class="card-mermaid"><div class="mermaid" data-mermaid-source="' +
+                encodeURIComponent(code) + '">' + code + '</div></div>';
             }
-            if (lang === 'java') {
+            if (language === 'java' && window.Prism && Prism.languages.java) {
               return '<pre v-pre class="hljs"><code>' +
                 Prism.highlight(code, Prism.languages.java, 'java') +
                 '</code></pre>';
             }
-            var langClass = lang ? ' class="language-' + lang + '"' : '';
+            var langClass = language ? ' class="language-' + language + '"' : '';
             return '<pre v-pre class="hljs"><code' + langClass + '>' + code + '</code></pre>';
           }
         }
       },
-      
-      // 分页导航
       pagination: {
         previousText: '上一篇',
         nextText: '下一篇',
         crossChapter: true,
         crossChapterText: true
       },
-      
-      // 字数统计
       count: {
         countable: true,
-        fontsize: '0.9em',
-        color: 'rgb(90,90,90)',
+        fontsize: '0.85em',
+        color: '#687385',
         language: 'chinese'
       },
-      
-      // 图片缩放
       zoomImage: {
         maxWidth: '100%',
         maxHeight: '100%'
-      }
-    }
+      },
+      plugins: []
+    };
   </script>
-  
-  <!-- 动漫助手脚本 -->
+
   <script>
-    const animeMessages = [
-      '💪 工作辛苦了！',
-      '☕ 休息一下吧~',
-      '✨ 你做得很棒！',
-      '🌟 继续加油哦！',
-      '💖 注意身体呀~',
-      '🎯 保持专注！',
-      '😊 开心工作~',
-      '🌈 美好的一天！'
+    const asukaMessages = [
+      '工作辛苦了',
+      '先读目录会更快',
+      '复杂系统也可以很清楚',
+      '配置项慢慢查',
+      '今天也保持锋利'
     ];
-    let messageIndex = 0;
-    
-    function toggleAnimeMessage() {
-      messageIndex = (messageIndex + 1) % animeMessages.length;
-      const bubble = document.getElementById('anime-message');
-      bubble.style.opacity = '0';
-      bubble.style.transform = 'translateY(-10px)';
-      
-      setTimeout(() => {
-        bubble.textContent = animeMessages[messageIndex];
-        bubble.style.opacity = '1';
-        bubble.style.transform = 'translateY(0)';
-      }, 200);
+    let asukaMessageIndex = 0;
+
+    function setTheme(theme) {
+      const isDark = theme === 'dark';
+      document.body.classList.toggle('dark-mode', isDark);
+      document.documentElement.classList.toggle('dark-mode', isDark);
+      document.getElementById('theme-icon').textContent = isDark ? '☀' : '☾';
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      if (window.mermaid) {
+        mermaid.initialize(getMermaidConfig());
+        renderMermaid();
+      }
     }
-    
-    // 黑暗模式切换
+
     function toggleTheme() {
-      const body = document.body;
-      const icon = document.getElementById('theme-icon');
-      body.classList.toggle('dark-mode');
-      
-      if (body.classList.contains('dark-mode')) {
-        icon.textContent = '☀️';
-        localStorage.setItem('theme', 'dark');
-      } else {
-        icon.textContent = '🌙';
-        localStorage.setItem('theme', 'light');
-      }
+      setTheme(document.body.classList.contains('dark-mode') ? 'light' : 'dark');
     }
-    
-    // 页面加载时恢复主题设置
-    window.addEventListener('DOMContentLoaded', () => {
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('theme-icon').textContent = '☀️';
+
+    function toggleAsukaMessage() {
+      asukaMessageIndex = (asukaMessageIndex + 1) % asukaMessages.length;
+      const message = document.getElementById('asuka-message');
+      message.textContent = asukaMessages[asukaMessageIndex];
+      message.classList.add('is-visible');
+      window.clearTimeout(toggleAsukaMessage.timer);
+      toggleAsukaMessage.timer = window.setTimeout(function() {
+        message.classList.remove('is-visible');
+      }, 2200);
+    }
+
+    function switchBranch(value) {
+      localStorage.setItem('fastsun-kb-branch', value);
+    }
+
+    function getMermaidConfig() {
+      const config = JSON.parse(JSON.stringify(window.__FASTSUN_MERMAID_THEME__));
+      if (document.body.classList.contains('dark-mode')) {
+        config.themeVariables.background = '#171a21';
+        config.themeVariables.mainBkg = '#1f232b';
+        config.themeVariables.primaryColor = '#242a34';
+        config.themeVariables.primaryTextColor = '#f6f8fb';
+        config.themeVariables.primaryBorderColor = '#3b4656';
+        config.themeVariables.secondaryColor = '#203044';
+        config.themeVariables.secondaryTextColor = '#f6f8fb';
+        config.themeVariables.secondaryBorderColor = '#415a76';
+        config.themeVariables.tertiaryColor = '#2a2637';
+        config.themeVariables.tertiaryTextColor = '#f6f8fb';
+        config.themeVariables.tertiaryBorderColor = '#574a78';
+        config.themeVariables.lineColor = '#9aa7b7';
+        config.themeVariables.textColor = '#f6f8fb';
+        config.themeVariables.secondBkg = '#242a34';
+        config.themeVariables.borderColor = '#3b4656';
+        config.themeVariables.clusterBkg = '#20242d';
+        config.themeVariables.clusterBorder = '#3b4656';
       }
+      return config;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+      bindShellControls();
     });
   </script>
-  
-  <!-- Docsify 核心 -->
+
   <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
-  
-  <!-- 搜索插件 -->
   <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
-  
-  <!-- 代码高亮 -->
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-java.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-yaml.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
-  
-  <!-- 分页插件 -->
   <script src="//cdn.jsdelivr.net/npm/docsify-pagination@2/dist/docsify-pagination.min.js"></script>
-  
-  <!-- 字数统计 -->
   <script src="//cdn.jsdelivr.net/npm/docsify-count@latest/dist/countable.min.js"></script>
-  
-  <!-- 图片缩放 -->
   <script src="//cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script>
-  <script>
-    window.$docsify.plugins = (window.$docsify.plugins || []).concat(function(hook) {
-      hook.doneEach(function() {
-        setTimeout(function() {
-          mediumZoom('.markdown-section img:not(.emoji):not([data-no-zoom])', {
-            background: 'rgba(0, 0, 0, 0.5)',
-            margin: 40
-          });
-        }, 500);
-      });
-    });
-  </script>
-  
-  <!-- 外部链接图标 -->
   <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/plugins/external-script.min.js"></script>
-  
-  <!-- Mermaid.js 图表渲染 -->
   <script src="//cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-  
-  <!-- Mermaid 初始化 -->
+
   <script>
-    mermaid.initialize({
-      startOnLoad: false,
-      theme: 'base',
-      securityLevel: 'loose',
-      themeVariables: {
-        primaryColor: '#FFFFFF',
-        primaryBorderColor: '#E5E5EA',
-        primaryTextColor: '#1D1D1F',
-        secondaryColor: '#F5F5F7',
-        tertiaryColor: '#FAFAFA',
-        lineColor: '#C7C7CC',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif',
-        fontSize: '13px',
-        nodeBorder: '#E5E5EA',
-        clusterBkg: 'rgba(245, 245, 247, 0.9)',
-        clusterBorder: '#E5E5EA',
-        titleColor: '#1D1D1F',
-        edgeLabelBackground: '#FFFFFF'
-      },
-      flowchart: {
-        useMaxWidth: false,
-        htmlLabels: true,
-        curve: 'basis',
-        nodeSpacing: 50,
-        rankSpacing: 50
-      },
-      sequence: {
-        useMaxWidth: false,
-        wrap: true,
-        mirrorActors: false,
-        boxMargin: 10
-      },
-      class: { useMaxWidth: false },
-      state: { useMaxWidth: false },
-      er: { useMaxWidth: false },
-      gantt: { useMaxWidth: false },
-      journey: { useMaxWidth: false }
-    });
-  </script>
+    function bindShellControls() {
+      const menuButton = document.querySelector('.kb-menu-button');
+      const scrim = document.querySelector('.kb-mobile-scrim');
 
-  <!-- 右侧目录边栏 + Mermaid 渲染 + 全屏查看器 插件 -->
-  <script>
-    (function() {
-      // ==================== Mermaid 全屏查看器 ====================
-      var viewer = null;        // .mermaid-viewer DOM
-      var imgEl = null;         // 查看器中的 <img>（自包含 SVG）
-      var zoomLabel = null;     // 缩放比例标签
-
-      // 视图状态
-      var scale = 1;
-      var panX = 0, panY = 0;
-      // 原始尺寸
-      var imgW = 0, imgH = 0;
-
-      // 拖拽状态
-      var dragging = false;
-      var dragStartX = 0, dragStartY = 0;
-      var panStartX = 0, panStartY = 0;
-
-      // 最小/最大缩放
-      var MIN_SCALE = 0.05;
-      var MAX_SCALE = 10;
-
-      function initViewer() {
-        document.addEventListener('click', function(e) {
-          var mermaidEl = e.target.closest('.markdown-section .mermaid');
-          if (mermaidEl && !e.target.closest('.mermaid-viewer')) {
-            e.preventDefault();
-            e.stopPropagation();
-            openViewer(mermaidEl);
-          }
-        });
-
-        document.addEventListener('keydown', function(e) {
-          if (e.key === 'Escape' && viewer && viewer.classList.contains('active')) {
-            e.preventDefault();
-            closeViewer();
-          }
-        });
-
-        document.addEventListener('wheel', function(e) {
-          if (!viewer || !viewer.classList.contains('active')) return;
-          e.preventDefault();
-          var delta = e.deltaY > 0 ? 0.9 : 1.1;
-          zoomAtPoint(e.clientX, e.clientY, delta);
-        }, { passive: false });
+      function setSidebar(open) {
+        document.body.classList.toggle('sidebar-open', open);
+        if (menuButton) menuButton.setAttribute('aria-expanded', open ? 'true' : 'false');
       }
 
-      function openViewer(sourceEl) {
-        closeViewer();
-
-        var srcSvg = sourceEl.querySelector('svg');
-        if (!srcSvg) return;
-
-        // 从原始已渲染 SVG 获取可见尺寸
-        var rect = srcSvg.getBoundingClientRect();
-        imgW = rect.width || 800;
-        imgH = rect.height || 600;
-
-        // 创建全屏容器
-        viewer = document.createElement('div');
-        viewer.className = 'mermaid-viewer';
-
-        // 工具栏
-        var toolbar = document.createElement('div');
-        toolbar.className = 'mermaid-viewer-toolbar';
-        toolbar.innerHTML =
-          '<button class="v-zoomout" title="缩小">−</button>' +
-          '<span class="mermaid-viewer-zoom-label">100%</span>' +
-          '<button class="v-zoomin" title="放大">+</button>' +
-          '<button class="v-fit" title="适应屏幕">⊡</button>' +
-          '<button class="v-close" title="关闭 (Esc)">✕</button>';
-        viewer.appendChild(toolbar);
-
-        // 底部提示
-        var hint = document.createElement('div');
-        hint.className = 'mermaid-viewer-hint';
-        hint.textContent = '滚轮缩放 · 拖拽平移 · 双击适应屏幕 · Esc 关闭';
-        viewer.appendChild(hint);
-
-        // 克隆整个 .mermaid 容器，不改动任何属性，颜色与页面完全一致
-        var clone = sourceEl.cloneNode(true);
-        clone.id = '';
-        clone.style.cssText = 'display:block;transform-origin:0 0;';
-        viewer.appendChild(clone);
-        document.body.appendChild(viewer);
-
-        zoomLabel = viewer.querySelector('.mermaid-viewer-zoom-label');
-        fitToScreen();
-        requestAnimationFrame(function() {
-          viewer.classList.add('active');
-        });
-        setTimeout(function() {
-          if (hint) hint.classList.add('hidden');
-        }, 3000);
-
-        // --- 事件绑定 ---
-        toolbar.querySelector('.v-zoomin').addEventListener('click', function(e) {
-          e.stopPropagation();
-          zoomAtCenter(1.3);
-        });
-        toolbar.querySelector('.v-zoomout').addEventListener('click', function(e) {
-          e.stopPropagation();
-          zoomAtCenter(0.7);
-        });
-        toolbar.querySelector('.v-fit').addEventListener('click', function(e) {
-          e.stopPropagation();
-          fitToScreen();
-        });
-        toolbar.querySelector('.v-close').addEventListener('click', function(e) {
-          e.stopPropagation();
-          closeViewer();
-        });
-
-        viewer.addEventListener('mousedown', function(e) {
-          if (e.target.closest('.mermaid-viewer-toolbar')) return;
-          dragging = true;
-          dragStartX = e.clientX;
-          dragStartY = e.clientY;
-          panStartX = panX;
-          panStartY = panY;
-          viewer.classList.add('dragging');
-        });
-
-        document.addEventListener('mousemove', function(e) {
-          if (!dragging) return;
-          panX = panStartX + (e.clientX - dragStartX);
-          panY = panStartY + (e.clientY - dragStartY);
-          applyTransform();
-        });
-
-        document.addEventListener('mouseup', function() {
-          if (dragging) {
-            dragging = false;
-            if (viewer) viewer.classList.remove('dragging');
-          }
-        });
-
-        viewer.addEventListener('touchstart', function(e) {
-          if (e.target.closest('.mermaid-viewer-toolbar')) return;
-          if (e.touches.length === 1) {
-            dragging = true;
-            dragStartX = e.touches[0].clientX;
-            dragStartY = e.touches[0].clientY;
-            panStartX = panX;
-            panStartY = panY;
-          }
-        }, { passive: true });
-
-        viewer.addEventListener('touchmove', function(e) {
-          if (!dragging || e.touches.length !== 1) return;
-          e.preventDefault();
-          panX = panStartX + (e.touches[0].clientX - dragStartX);
-          panY = panStartY + (e.touches[0].clientY - dragStartY);
-          applyTransform();
-        }, { passive: false });
-
-        viewer.addEventListener('touchend', function() {
-          dragging = false;
-        });
-
-        viewer.addEventListener('dblclick', function(e) {
-          if (e.target.closest('.mermaid-viewer-toolbar')) return;
-          e.preventDefault();
-          fitToScreen();
+      if (menuButton) {
+        menuButton.addEventListener('click', function() {
+          setSidebar(!document.body.classList.contains('sidebar-open'));
         });
       }
 
-      function applyTransform() {
-        var el = viewer && viewer.querySelector('.mermaid');
-        if (!el) return;
-        el.style.transform = 'translate(' + panX + 'px,' + panY + 'px) scale(' + scale + ')';
-        if (zoomLabel) {
-          zoomLabel.textContent = Math.round(scale * 100) + '%';
+      if (scrim) {
+        scrim.addEventListener('click', function() {
+          setSidebar(false);
+        });
+      }
+
+      document.addEventListener('click', function(event) {
+        const link = event.target.closest('.sidebar a');
+        if (link && window.innerWidth <= 1024) {
+          setSidebar(false);
         }
-      }
+      });
+    }
 
-      function fitToScreen() {
-        if (!viewer || imgW < 1) return;
-        var vw = window.innerWidth;
-        var vh = window.innerHeight;
-        var fitScale = Math.min(vw / imgW, vh / imgH) * 0.85;
-        scale = fitScale;
-        panX = (vw - imgW * scale) / 2;
-        panY = (vh - imgH * scale) / 2;
-        applyTransform();
-      }
+    function moveSearchToTopbar() {
+      const search = document.querySelector('.sidebar .search');
+      const slot = document.getElementById('kb-search-slot');
+      if (!search || !slot || slot.contains(search)) return;
+      slot.innerHTML = '';
+      slot.appendChild(search);
+    }
 
-      function zoomAtCenter(factor) {
-        if (!viewer) return;
-        zoomAtPoint(window.innerWidth / 2, window.innerHeight / 2, factor);
-      }
+    function enhanceSidebarBrand() {
+      const sidebar = document.querySelector('.sidebar');
+      if (!sidebar || sidebar.querySelector('.kb-sidebar-brand')) return;
 
-      function zoomAtPoint(cx, cy, factor) {
-        var newScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, scale * factor));
-        var sx = (cx - panX) / scale;
-        var sy = (cy - panY) / scale;
-        panX = cx - sx * newScale;
-        panY = cy - sy * newScale;
-        scale = newScale;
-        applyTransform();
-      }
+      const brand = document.createElement('div');
+      brand.className = 'kb-sidebar-brand';
+      brand.innerHTML =
+        '<img src="images/logo.png" alt="" class="kb-sidebar-logo">' +
+        '<div><strong>Fastsun Docs</strong><span>多租户框架知识库</span></div>';
 
-      function closeViewer() {
-        if (viewer) {
-          viewer.classList.remove('active');
-          var v = viewer;
-          setTimeout(function() {
-            if (v && v.parentNode) v.parentNode.removeChild(v);
-          }, 300);
-          viewer = null;
-          imgEl = null;
-          zoomLabel = null;
-          scale = 1;
-          panX = 0;
-          panY = 0;
-          imgW = 0;
-          imgH = 0;
-          dragging = false;
+      const nav = sidebar.querySelector('.sidebar-nav');
+      sidebar.insertBefore(brand, nav || sidebar.firstChild);
+    }
+
+    function buildChapterNav() {
+      const content = document.querySelector('.markdown-section');
+      if (!content) return;
+
+      const oldNav = content.querySelector('.chapter-nav');
+      if (oldNav) oldNav.remove();
+
+      const headings = Array.from(content.querySelectorAll('h2, h3')).filter(function(heading) {
+        return heading.textContent.trim().length > 0;
+      });
+      if (!headings.length) return;
+
+      const details = document.createElement('details');
+      details.className = 'chapter-nav';
+      details.open = window.innerWidth >= 900 && headings.length <= 8;
+
+      const summary = document.createElement('summary');
+      summary.innerHTML = '<span>本页章节</span><small>' + headings.length + ' 个节点</small>';
+      details.appendChild(summary);
+
+      const list = document.createElement('nav');
+      list.setAttribute('aria-label', '本页章节');
+
+      headings.forEach(function(heading) {
+        if (!heading.id) {
+          heading.id = heading.textContent.trim().replace(/\s+/g, '-').toLowerCase();
         }
-      }
-
-      // 初始化
-      initViewer();
-
-      // ==================== 右侧目录边栏 ====================
-      function buildRightSidebar() {
-        var sidebar = document.getElementById('right-sidebar');
-        if (!sidebar) return;
-
-        var content = document.querySelector('.markdown-section');
-        if (!content) { sidebar.innerHTML = ''; return; }
-
-        var headings = content.querySelectorAll('h2, h3');
-        if (headings.length === 0) { sidebar.innerHTML = ''; return; }
-
-        var html = '<div class="right-sidebar-title">本页目录</div><nav class="right-sidebar-nav"><ul>';
-        headings.forEach(function(h) {
-          var id = h.id || h.textContent.trim().replace(/\s+/g, '-').toLowerCase();
-          var text = h.textContent.trim();
-          var tag = h.tagName.toLowerCase();
-          if (tag === 'h3') {
-            html += '<li class="h3-item"><a href="#' + id + '" class="h3-link">' + text + '</a></li>';
-          } else {
-            html += '<li><a href="#' + id + '">' + text + '</a></li>';
-          }
+        const link = document.createElement('a');
+        link.href = '#' + encodeURIComponent(heading.id);
+        link.textContent = heading.textContent.trim();
+        link.className = heading.tagName.toLowerCase() === 'h3' ? 'is-subsection' : '';
+        link.addEventListener('click', function(event) {
+          event.preventDefault();
+          scrollToHeading(heading);
         });
-        html += '</ul></nav>';
-        sidebar.innerHTML = html;
+        list.appendChild(link);
+      });
 
-        // 绑定点击事件：平滑滚动 + 仅更新 hash fragment（不改变路由路径）
-        sidebar.querySelectorAll('a').forEach(function(a) {
-          a.addEventListener('click', function(e) {
-            e.preventDefault();
-            var targetId = this.getAttribute('href').substring(1);
-            var target = document.getElementById(targetId);
-            if (!target) {
-              target = document.querySelector('[id="' + targetId + '"]');
-            }
-            if (!target) {
-              target = document.getElementById(decodeURIComponent(targetId));
-            }
-            if (target) {
-              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-            // 高亮当前点击项
-            sidebar.querySelectorAll('a').forEach(function(a2) { a2.classList.remove('active-section'); });
-            this.classList.add('active-section');
-          });
-        });
-      }
+      details.appendChild(list);
+      const first = content.firstElementChild;
+      content.insertBefore(details, first);
+      observeActiveChapter(headings, list);
+    }
 
-      // 滚动监听：高亮当前章节
-      function updateActiveSection() {
-        var sidebar = document.getElementById('right-sidebar');
-        if (!sidebar) return;
-        var links = sidebar.querySelectorAll('a');
-        if (links.length === 0) return;
+    function observeActiveChapter(headings, nav) {
+      const links = Array.from(nav.querySelectorAll('a'));
+      if (!('IntersectionObserver' in window)) return;
 
-        var content = document.querySelector('.markdown-section');
-        if (!content) return;
-
-        var headings = content.querySelectorAll('h2, h3');
-        if (headings.length === 0) return;
-
-        var scrollTop = content.scrollTop || 0;
-
-        // 默认选中第一个（未滚动或未渲染完成时始终为首项）
-        var activeIndex = 0;
-
-        // 只有在已滚动且标题已渲染的情况下才计算
-        if (scrollTop > 20 && headings[0].offsetTop > 0) {
-          headings.forEach(function(h, i) {
-            if (h.offsetTop <= scrollTop + 100) {
-              activeIndex = i;
-            }
-          });
-        }
-
+      const observer = new IntersectionObserver(function(entries) {
+        const visible = entries
+          .filter(function(entry) { return entry.isIntersecting; })
+          .sort(function(a, b) { return a.boundingClientRect.top - b.boundingClientRect.top; })[0];
+        if (!visible) return;
+        const index = headings.indexOf(visible.target);
         links.forEach(function(link, i) {
-          link.classList.toggle('active-section', i === activeIndex);
+          link.classList.toggle('is-active', i === index);
         });
-      }
-
-      // Docsify 插件
-      window.$docsify = window.$docsify || {};
-      var existingPlugins = window.$docsify.plugins || [];
-      window.$docsify.plugins = existingPlugins.concat(function(hook) {
-        hook.doneEach(function() {
-          // 构建右侧边栏
-          buildRightSidebar();
-
-          // 重置内容区滚动位置（Docsify 复用 DOM，innerHTML 替换不会重置 scrollTop）
-          var content = document.querySelector('.markdown-section');
-          if (content) content.scrollTop = 0;
-
-          // 立即高亮首个目录项
-          updateActiveSection();
-
-          // 渲染 Mermaid 图表
-          setTimeout(function() {
-            if (typeof mermaid !== 'undefined') {
-              mermaid.run({ nodes: document.querySelectorAll('.mermaid') });
-            }
-          }, 300);
-        });
+      }, {
+        root: null,
+        rootMargin: '-96px 0px -72% 0px',
+        threshold: 0.01
       });
 
-      // 内容区滚动监听（用于高亮当前章节）
-      document.addEventListener('DOMContentLoaded', function() {
-        var content = document.querySelector('.markdown-section');
-        if (content) {
-          content.addEventListener('scroll', function() {
-            requestAnimationFrame(updateActiveSection);
-          });
-        }
+      headings.forEach(function(heading) {
+        observer.observe(heading);
       });
-    })();
-  </script>
+    }
 
-  <!-- 锚点定位修复脚本 -->
-  <script>
-    // 等待 Docsify 初始化完成后处理锚点定位
-    document.addEventListener('DOMContentLoaded', function() {
-      // 延迟执行确保 DOM 完全加载
-      setTimeout(function() {
-        handleAnchorScroll();
-      }, 500);
-    });
-    
-    // 处理锚点滚动的函数
+    function scrollToHeading(heading) {
+      heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      history.replaceState(null, '', window.location.hash.split('?id=')[0] + '?id=' + encodeURIComponent(heading.id));
+    }
+
     function handleAnchorScroll() {
-      // 从 URL 中提取锚点 ID
-      let anchorId = null;
       const hash = window.location.hash;
-      
-      // Docsify 格式: #/path/file?id=anchor 或 #/path/file#anchor
+      let anchorId = '';
       if (hash.includes('?id=')) {
         anchorId = hash.split('?id=')[1].split('&')[0];
       } else if (hash.includes('#') && hash.lastIndexOf('#') > 0) {
         anchorId = hash.substring(hash.lastIndexOf('#') + 1);
-      } else if (hash.startsWith('#') && hash.length > 1 && !hash.includes('/')) {
-        anchorId = hash.substring(1);
       }
-      
-      if (anchorId) {
-        // 尝试多种选择器查找元素
-        let element = document.getElementById(anchorId);
-        if (!element) {
-          element = document.querySelector('[id="' + anchorId + '"]');
-        }
-        if (!element) {
-          // 尝试解码后的 ID（处理中文）
-          element = document.getElementById(decodeURIComponent(anchorId));
-        }
-        
-        if (element) {
-          scrollToElement(element);
-        }
+      if (!anchorId) return;
+
+      const decoded = decodeURIComponent(anchorId);
+      const element = document.getElementById(anchorId) || document.getElementById(decoded);
+      if (element) {
+        window.setTimeout(function() {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 80);
       }
     }
-    
-    // 滚动到指定元素的通用函数（使用原生 scrollIntoView 避免容器布局偏移）
-    function scrollToElement(element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-    
-    // 监听所有锚点链接点击事件（包括侧边栏和页面内链接）
-    document.addEventListener('click', function(e) {
-      const link = e.target.closest('a');
-      if (!link) return;
-      
-      const href = link.getAttribute('href');
-      if (!href) return;
-      
-      // 只拦截同页面锚点链接 (如 #section-name)，放行跨页链接给 Docsify 处理
-      // 搜索结果的链接格式为 #/path/to/page?id=xxx，包含 / 或 ?id=，不属于同页面锚点
-      const isSamePageAnchor = href.startsWith('#') && !href.includes('/') && !href.includes('?id=');
-      
-      if (isSamePageAnchor) {
-        e.preventDefault();
-        
-        const anchorId = href.substring(1);
-        
-        // 尝试多种选择器查找元素
-        let targetElement = document.getElementById(anchorId);
-        if (!targetElement) {
-          targetElement = document.querySelector('[id="' + anchorId + '"]');
+
+    function renderMermaid() {
+      if (!window.mermaid) return;
+      const nodes = document.querySelectorAll('.card-mermaid .mermaid');
+      nodes.forEach(function(node) {
+        const source = node.getAttribute('data-mermaid-source');
+        if (source) {
+          node.innerHTML = decodeURIComponent(source);
         }
-        if (!targetElement) {
-          targetElement = document.getElementById(decodeURIComponent(anchorId));
-        }
-        
-        if (targetElement) {
-          scrollToElement(targetElement);
-        } else {
-          // 如果元素还没渲染，延迟重试
-          setTimeout(function() {
-            let retryElement = document.getElementById(anchorId);
-            if (!retryElement) {
-              retryElement = document.getElementById(decodeURIComponent(anchorId));
-            }
-            if (retryElement) {
-              scrollToElement(retryElement);
-            }
-          }, 300);
-        }
-      }
-    });
-    
-    // 监听浏览器前进/后退按钮
-    window.addEventListener('popstate', function() {
-      setTimeout(handleAnchorScroll, 100);
-    });
-    
-    // 监听路由变化（Docsify 内部路由）
-    window.addEventListener('hashchange', function() {
-      setTimeout(handleAnchorScroll, 300);
-    });
-    
-    // Docsify 渲染完成后的钩子
-    window.$docsify = window.$docsify || {};
-    const originalInit = window.$docsify.plugins || [];
-    window.$docsify.plugins = originalInit.concat(function(hook) {
-      // 每次路由切换后处理锚点
-      hook.doneEach(function() {
-        setTimeout(handleAnchorScroll, 200);
+        node.removeAttribute('data-processed');
       });
+      mermaid.run({ nodes: nodes });
+    }
+
+    function initMermaidViewer() {
+      let viewer = null;
+      let scale = 1;
+      let panX = 0;
+      let panY = 0;
+      let dragging = false;
+      let dragStartX = 0;
+      let dragStartY = 0;
+      let panStartX = 0;
+      let panStartY = 0;
+      let sourceWidth = 800;
+      let sourceHeight = 600;
+
+      document.addEventListener('click', function(event) {
+        const card = event.target.closest('.card-mermaid');
+        if (!card || event.target.closest('.mermaid-viewer')) return;
+        const svg = card.querySelector('svg');
+        if (!svg) return;
+        event.preventDefault();
+        openViewer(card, svg);
+      });
+
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') closeViewer();
+      });
+
+      document.addEventListener('wheel', function(event) {
+        if (!viewer || !viewer.classList.contains('active')) return;
+        event.preventDefault();
+        zoomAt(event.clientX, event.clientY, event.deltaY > 0 ? 0.9 : 1.1);
+      }, { passive: false });
+
+      function openViewer(card, svg) {
+        closeViewer();
+        const rect = svg.getBoundingClientRect();
+        sourceWidth = rect.width || 800;
+        sourceHeight = rect.height || 600;
+
+        viewer = document.createElement('div');
+        viewer.className = 'mermaid-viewer';
+        viewer.innerHTML =
+          '<div class="mermaid-viewer-toolbar">' +
+          '<button class="v-zoomout" title="缩小">−</button>' +
+          '<span class="mermaid-viewer-zoom-label">100%</span>' +
+          '<button class="v-zoomin" title="放大">+</button>' +
+          '<button class="v-fit" title="适应屏幕">⊡</button>' +
+          '<button class="v-close" title="关闭">×</button>' +
+          '</div>' +
+          '<div class="mermaid-viewer-hint">滚轮缩放 · 拖拽平移 · 双击适应屏幕 · Esc 关闭</div>';
+
+        const clone = card.querySelector('.mermaid').cloneNode(true);
+        clone.style.cssText = 'display:block;transform-origin:0 0;';
+        viewer.appendChild(clone);
+        document.body.appendChild(viewer);
+
+        viewer.querySelector('.v-zoomin').addEventListener('click', function(event) {
+          event.stopPropagation();
+          zoomAt(window.innerWidth / 2, window.innerHeight / 2, 1.25);
+        });
+        viewer.querySelector('.v-zoomout').addEventListener('click', function(event) {
+          event.stopPropagation();
+          zoomAt(window.innerWidth / 2, window.innerHeight / 2, 0.8);
+        });
+        viewer.querySelector('.v-fit').addEventListener('click', function(event) {
+          event.stopPropagation();
+          fitToScreen();
+        });
+        viewer.querySelector('.v-close').addEventListener('click', function(event) {
+          event.stopPropagation();
+          closeViewer();
+        });
+        viewer.addEventListener('mousedown', startDrag);
+        document.addEventListener('mousemove', moveDrag);
+        document.addEventListener('mouseup', endDrag);
+        viewer.addEventListener('dblclick', fitToScreen);
+
+        fitToScreen();
+        requestAnimationFrame(function() {
+          viewer.classList.add('active');
+        });
+      }
+
+      function startDrag(event) {
+        if (event.target.closest('.mermaid-viewer-toolbar')) return;
+        dragging = true;
+        dragStartX = event.clientX;
+        dragStartY = event.clientY;
+        panStartX = panX;
+        panStartY = panY;
+        viewer.classList.add('dragging');
+      }
+
+      function moveDrag(event) {
+        if (!dragging || !viewer) return;
+        panX = panStartX + event.clientX - dragStartX;
+        panY = panStartY + event.clientY - dragStartY;
+        applyTransform();
+      }
+
+      function endDrag() {
+        dragging = false;
+        if (viewer) viewer.classList.remove('dragging');
+      }
+
+      function fitToScreen() {
+        if (!viewer) return;
+        scale = Math.min(window.innerWidth / sourceWidth, window.innerHeight / sourceHeight) * 0.82;
+        panX = (window.innerWidth - sourceWidth * scale) / 2;
+        panY = (window.innerHeight - sourceHeight * scale) / 2;
+        applyTransform();
+      }
+
+      function zoomAt(cx, cy, factor) {
+        const nextScale = Math.max(0.08, Math.min(8, scale * factor));
+        const sx = (cx - panX) / scale;
+        const sy = (cy - panY) / scale;
+        panX = cx - sx * nextScale;
+        panY = cy - sy * nextScale;
+        scale = nextScale;
+        applyTransform();
+      }
+
+      function applyTransform() {
+        const canvas = viewer && viewer.querySelector('.mermaid');
+        if (!canvas) return;
+        canvas.style.transform = 'translate(' + panX + 'px,' + panY + 'px) scale(' + scale + ')';
+        viewer.querySelector('.mermaid-viewer-zoom-label').textContent = Math.round(scale * 100) + '%';
+      }
+
+      function closeViewer() {
+        if (!viewer) return;
+        const closing = viewer;
+        closing.classList.remove('active');
+        window.setTimeout(function() {
+          if (closing.parentNode) closing.parentNode.removeChild(closing);
+        }, 180);
+        viewer = null;
+      }
+    }
+
+    window.$docsify.plugins = (window.$docsify.plugins || []).concat(function(hook) {
+      hook.doneEach(function() {
+        window.setTimeout(function() {
+          moveSearchToTopbar();
+          enhanceSidebarBrand();
+          buildChapterNav();
+          handleAnchorScroll();
+          if (window.mediumZoom) {
+            mediumZoom('.markdown-section img:not(.emoji):not([data-no-zoom]):not(.kb-asuka-img)', {
+              background: 'rgba(17, 24, 39, 0.68)',
+              margin: 40
+            });
+          }
+          if (window.mermaid) {
+            mermaid.initialize(getMermaidConfig());
+            renderMermaid();
+          }
+        }, 120);
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      initMermaidViewer();
+    });
+
+    window.addEventListener('hashchange', function() {
+      window.setTimeout(handleAnchorScroll, 160);
     });
   </script>
 </body>
