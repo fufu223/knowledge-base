@@ -1087,6 +1087,23 @@ body.dark-mode .sidebar-nav ul ul li a.active::before {
 }
 
 /* ==================== 响应式设计 ==================== */
+/* 笔记本适配 - 解决内容与侧边栏重叠问题 */
+@media (max-width: 1599px) and (min-width: 769px) {
+  .markdown-section {
+    left: 300px !important;
+    right: 20px !important;
+    bottom: 20px !important;
+    transform: none !important;
+    width: auto !important;
+    max-width: none !important;
+    top: 100px !important;
+  }
+
+  .branch-badge {
+    left: 290px;
+  }
+}
+
 @media (max-width: 768px) {
   .sidebar {
     width: 220px !important;
